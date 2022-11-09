@@ -20,7 +20,7 @@ clear; clc;
 % Model Timing
 %%%%%%%%%%%%%%%%%%
 IN.tMax  = '1 Myr';   % Model run time, use 'yr' 'kyr' 'Myr' or 'Gyr'
-IN.tOut  = '100 kyr'; % Output Frequency
+IN.tOut  = '10 kyr';  % Output Frequency
 IN.pltOn = 1;         % Plot output in real time
 IN.movOn = 0;         % Save plot movie
 
@@ -35,7 +35,7 @@ IN.lat  = 0;          % Latitude of simulation (deg)
 %%%%%%%%%%%%%%%%%%
 IN.H0  = 25e3;        % Initial ice shell thickness [m]
 
-IN.Nz  = 300;         % Number of nodes in vertical direction
+IN.Nz  = 200;         % Number of nodes in vertical direction
 IN.Nx  = 100;         % Number of nodes in hotizontal direction (not implemented)
 
 % NOTE: You always want at least 3 full elements between the surface and
@@ -43,8 +43,8 @@ IN.Nx  = 100;         % Number of nodes in hotizontal direction (not implemented
 % interface because of thermal conductivity smoothing for convective water
 % bodies. It may break when the number of reservoir elements is <= 3.
 % Maybe not.
-IN.rRes    = 2.5e3;      % Initial reservoir radius [m]
-IN.zResTop = 5e3;        % Initial reservoir top depth [m]
+IN.rRes    = 5e3;      % Initial reservoir radius [m]
+IN.zResTop = 10e3;        % Initial reservoir top depth [m]
 IN.tRes    = '100 kyr';  % Time after which to start emplacement
 
 

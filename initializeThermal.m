@@ -8,7 +8,7 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [M] = initializeTemp(IN,BOD,M)
+function [M] = initializeThermal(IN,BOD,M)
 
 % First, we must get the surface temperature that matches the steady state
 % conductive thickness prescribed
