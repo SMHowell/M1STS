@@ -30,11 +30,11 @@ if IN.pltOn
             % Set up counters and arrays
             MISC.F1  = struct('cdata', cell(1,IN.outN), 'colormap', cell(1,IN.outN));
             MISC.fg  = figure(figNum);
-            set(figure(figNum),'Position',[-2560 500 1920 1080]);
+            set(figure(figNum),'Units','pixels','Position',[100 100 1920 1080])
             set(figure(figNum),'doublebuffer','off','Visible','Off');
         else
             MISC.fg = figure(figNum);
-            set(figure(figNum),'Position',[-2560 500 1920 1080]);
+            set(figure(figNum),'Units','pixels','Position',[100 100 1920 1080])
         end
     end
     
