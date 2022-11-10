@@ -113,21 +113,20 @@ if M.vRes>0
     end
     
     % Calculate change in melt
-    dE_Top = dE_resTop + dE_iceTop;
-    dE_Bot = dE_resBot + dE_iceBot;
+    dETop = dE_resTop + dE_iceTop;
+    dEBot = dE_resBot + dE_iceBot;
     
-    dm_Top = dE_Top/IN.L;    % Total change in melt mass
-    dv_Top = dm_Top/M.rhoRes; % Total change in melt volume
+    % NOTE: These dvs are for a global spherical shell of melt, NOT for the
+    % reservoir! 
+    dmTop = dETop/IN.L;    % Total change in melt mass
+    dvTop = dmTop/M.rhoRes; % Total change in melt volume 
     
-    dm_Bot = dE_Bot/IN.L;    % Total change in melt mass
-    dv_Bot = dm_Bot/M.rhoRes; % Total change in melt volume
+    dmBot = dEBot/IN.L;    % Total change in melt mass
+    dvBot = dmBot/M.rhoRes; % Total change in melt volume
     
     % Change in interface location
-    drTop = ((3/(4*pi))*dv_Top+M.rResTop^3)^(1/3)-M.rResTop;
-    drBot = (-(3/(4*pi))*dv_Bot+M.rResBot^3)^(1/3)-M.rResBot;
-    
-    M.rResTop = ((3/(4*pi))*dv_Top+M.rResTop^3)^(1/3);
-    M.rResBot = (-(3/(4*pi))*dv_Bot+M.rResBot^3)^(1/3);
+    M.rResTop = ((3/(4*pi))*dvTop+M.rResTop^3)^(1/3);
+    M.rResBot = (-(3/(4*pi))*dvBot+M.rResBot^3)^(1/3);
     
     % Change in reservoir size and frozen fraction
     M.rRes  = (M.rResTop-M.rResBot)/2; % Reservoir radius
@@ -138,8 +137,8 @@ if M.vRes>0
     M.iResTop = find((M.rResTop - M.r>0)>0,1,'last'); % Reservoir top interface element index
     M.iResBot = find((M.rResBot - M.r>0)>0,1,'last'); % Reservoir bottom interface element index
     
-    % Check if reservoir is fully frozen
-    if M.rResTop <= M.rResBot
+    if M.rResTop <= M.rResBot 
+        % Fully frozen reservoir
         % Energy Accounting
         rho_s = n2sVolumetric(M,M.rho);
         Cp_s  = n2sVolumetric(M,M.Cp);
@@ -159,7 +158,10 @@ if M.vRes>0
         M.fV    = 1;  % Reservoir frozen fraction
         M.mRes  = 0; % Reservoir mass
         
-    else
+    elseif M.rResBot <= M.rOcnTop
+        % Ice shell melted to reservoir depth
+        error('Ice Shell Melted Through.');
+    else 
         % Set melt fractions
         M.vfm((M.r_s>=M.rResBot) & (M.r_s<=M.rResTop)) = 1;
         M.vfm(M.iResTop) = (4/3)*pi*(M.rResTop^3 - M.r(M.iResTop)^3)/M.V_s(M.iResTop);
@@ -168,6 +170,11 @@ if M.vRes>0
         % Restore correct temperatures now that energy is back in the right place
         M.T((M.r>=M.rResBot) & (M.r<=M.rResTop)) = M.Tm_res;
     end
+    
+    %%%%%%%%%%%%%
+    % Handle change in Tm
+    
+    
 else
     
 end
