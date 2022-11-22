@@ -11,7 +11,7 @@
 function M = reservoirEmplacement(M,IN)
 
 % Check if its time for reservoir emplacement
-if (M.t>IN.tRes) && (M.resEmp == 0)
+if (M.t>IN.tRes) && (M.resEmp == 0) && (M.resOn)
     % Set flag
     M.resEmp = 1;
     

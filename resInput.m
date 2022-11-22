@@ -43,8 +43,9 @@ IN.Nx  = 100;         % Number of nodes in hotizontal direction (not implemented
 % interface because of thermal conductivity smoothing for convective water
 % bodies. It may break when the number of reservoir elements is <= 3.
 % Maybe not.
-IN.rRes    = 5e3;      % Initial reservoir radius [m]
-IN.zResTop = 10e3;        % Initial reservoir top depth [m]
+IN.resOn   = 0;          % Enable Ice shell reservoir
+IN.rRes    = 5e3;        % Initial reservoir radius [m]
+IN.zResTop = 10e3;       % Initial reservoir top depth [m]
 IN.tRes    = '100 kyr';  % Time after which to start emplacement
 
 

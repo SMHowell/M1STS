@@ -105,10 +105,10 @@ if IN.pltOn
     %%%%%%%%%%%%%
     % Plot the reservoir
     % Plot outline of original reservoir and outline of current config
-    p = nsidedpoly(100, 'Center', [0 rResCenter_0], 'Radius', rRes_0);
-    plot(p, 'FaceColor', 'c','edgecolor','c')
-    
     if M.rRes>0
+        p = nsidedpoly(100, 'Center', [0 rResCenter_0], 'Radius', rRes_0);
+        plot(p, 'FaceColor', 'c','edgecolor','c')
+        
         p = nsidedpoly(100, 'Center', [0 rResCenter], 'Radius', rRes);
         plot(p, 'FaceColor', 'c','edgecolor','k')
         set(gca,'layer','top');
