@@ -161,7 +161,11 @@ if IN.pltOn
             end
         end
         MISC.F1(logical(noFrame)) = [];
+        if IN.resOn
         outputName = ['H0' num2str(IN.H0/1e3,'%0.1f') '_rRes' num2str(IN.rRes/1e3,'%0.1f') '_zRes' num2str(IN.zResTop/1e3,'%0.1f')];
+        else
+               outputName = ['H0' num2str(IN.H0/1e3,'%0.1f') '_resOff'];    
+        end
         v = VideoWriter(['Output\Movies\' outputName '.mp4'],'MPEG-4');
         if IN.outInd >= 300
             v.FrameRate = 60;

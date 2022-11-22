@@ -2,7 +2,7 @@
 % Multiphase 1-dimensional Satellite Thermal Solver
 % Spherically symmetric solver for the heat diffusion equation, explicit
 % finite difference in time. Tailored for applications to planetary
-% evolution with considerations for phase change, reservoir freezing, and 
+% evolution with considerations for phase change, reservoir freezing, and
 % eruption.
 % Sam Howell, Elodie Lesage, Julia Miller
 % (C)2022 California Institute of Technology. All rights reserved.
@@ -10,7 +10,7 @@
 
 function [IN, OUT, MISC] = outputManager(M,IN,BOD,OUT,MISC)
 
-if IN.outInd * IN.tOut < M.t    
+if IN.outInd * IN.tOut < M.t
     IN.outInd = IN.outInd + 1;
     
     %%%%%%%%%%%%%%%%%%
@@ -46,7 +46,7 @@ if IN.outInd * IN.tOut < M.t
         outTime = M.t/IN.Gyr2s;
         unit    = 'Gyr';
     end
-
+    
     %%%%%%%%%%%%%%%%%%
     % Build Output Message
     %%%%%%%%%%%%%%%%%%
@@ -54,7 +54,7 @@ if IN.outInd * IN.tOut < M.t
     str{end+1} = [' T_surf = ' num2str(M.Tsurf,'%05.1f.')];
     str{end+1} = [' ' num2str(100*IN.outInd/IN.NOut,'%04.1f') '% Complete.'];
     disp([str{:}]);
-     
+    
     %%%%%%%%%%%%%%%%%%
     % Plots
     %%%%%%%%%%%%%%%%%%
@@ -63,10 +63,14 @@ if IN.outInd * IN.tOut < M.t
     [MISC] = polarPlot(IN,M,OUT,MISC);
     
     
-    if (IN.outInd == IN.NOut) 
-        outputName = ['H0' num2str(IN.H0/1e3,'%0.1f') '_rRes' num2str(IN.rRes/1e3,'%0.1f') '_zRes' num2str(IN.zResTop/1e3,'%0.1f')];
-        curentDir  = pwd;
-        save(['Output/' outputName '.mat'],'OUT');
+    if (IN.outInd == IN.NOut)
+        if IN.resOn
+            outputName = ['H0' num2str(IN.H0/1e3,'%0.1f') '_rRes' num2str(IN.rRes/1e3,'%0.1f') '_zRes' num2str(IN.zResTop/1e3,'%0.1f')];
+            save(['Output/' outputName '.mat'],'OUT');
+        else
+            outputName = ['H0' num2str(IN.H0/1e3,'%0.1f') '_resOff'];
+            save(['Output/' outputName '.mat'],'OUT');
+        end
     end
     
 end
