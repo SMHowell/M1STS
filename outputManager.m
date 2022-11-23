@@ -20,7 +20,7 @@ if IN.outInd * IN.tOut < M.t
     OUT.t(IN.outInd)     = M.t;
     OUT.dm_dt(IN.outInd) = M.dm_dt ;
     OUT.Tsurf(IN.outInd) = M.Tsurf;  % Surface Temperature
-    OUT.Dice(IN.outInd)  = BOD.R-M.rOcnTop; % Ice thickness
+    OUT.Dice(IN.outInd)  = BOD.R-M.rOcn; % Ice thickness
     
     if M.fV>0 % Only output of theres a reservoir, else zeros
         OUT.vRes(IN.outInd)  = M.vRes;   % Reservoir volume
@@ -65,10 +65,10 @@ if IN.outInd * IN.tOut < M.t
     
     if (IN.outInd == IN.NOut)
         if IN.resOn
-            outputName = ['H0' num2str(IN.H0/1e3,'%0.1f') '_rRes' num2str(IN.rRes/1e3,'%0.1f') '_zRes' num2str(IN.zResTop/1e3,'%0.1f')];
+            outputName = ['H0' num2str(IN.H0_ice/1e3,'%0.1f') '_rRes' num2str(IN.rRes/1e3,'%0.1f') '_zRes' num2str(IN.zResTop/1e3,'%0.1f')];
             save(['Output/' outputName '.mat'],'OUT');
         else
-            outputName = ['H0' num2str(IN.H0/1e3,'%0.1f') '_resOff'];
+            outputName = ['H0' num2str(IN.H0_ice/1e3,'%0.1f') '_resOff'];
             save(['Output/' outputName '.mat'],'OUT');
         end
     end

@@ -9,28 +9,53 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [M] = initializeGrid(IN,BOD)
+%%%%%%%%%%%%%%%%%%%%%%
+% Model Grid
+%%%%%%%%%%%%%%%%%%%%%%
+M.rOcn = BOD.R - IN.H0_ice;  % Outer radius of ocean surface
+M.rSil = BOD.R - IN.H0_H2O;  % Outer radius of seafloor
+M.rIrn = IN.H0_irn;          % Outer radius of core
 
-% Define useful values
-rBot     = BOD.R - 2*IN.H0; % Radius at the base of the model (2 ice shell depths) [m]
-rIce     = BOD.R - IN.H0;   % Radius at the base of the ice shell [m]
-M.refInd = 1:IN.Nz-1;       % A useful index for referencing values 
-M.rOcnTop = rIce;           % Depth to ocean surface
+r_ice = linspace(M.rOcn,    BOD.R,  ceil((BOD.R -M.rOcn)/IN.dz_ice));
+r_ocn = linspace(M.rSil,    M.rOcn, ceil((M.rOcn-M.rSil)/IN.dz_ocn));
+r_sil = linspace(M.rIrn,    M.rSil, ceil((M.rSil-M.rIrn)/IN.dz_sil));
+r_irn = linspace(0,         M.rIrn, ceil(M.rIrn/IN.dz_irn));
 
+% Radial array with space ghost node 1 km off the surface
+dz0   = 1e3; % Space node distance from surface
+M.r   = sort(unique([r_ice,r_ocn,r_sil,r_irn,BOD.R+dz0]));
+M.dr  = diff(M.r);             % Element height [m]
+M.z   = BOD.R - M.r;           % Depth [m]
 
-% Made radial grid extending to ghost node in space
-dr0  = (2*IN.H0/(IN.Nz-1)); % Approximate dr
-M.r  = [linspace(rBot,rIce,floor((IN.Nz-1)/2)),linspace(rIce+dr0,BOD.R,ceil((IN.Nz-1)/2)), BOD.R+dr0]; % Radius from center of body [m]
-M.dr = diff(M.r); % Element size [m]
-M.z  = BOD.R - M.r; % Depth [z]
+M.Nz = numel(M.r);            % Number of nodes in vertical direction
+M.ind = 1:M.Nz-1;             % A useful index for referencing values 
 
 % Define the location of elements in thermal calculations. Note that M.r_s
 % converges to the midpoint between nodes when ice thickness << body radius
-M.r_s = sqrt(M.r(M.refInd) .* M.r(M.refInd+1)); 
-M.z_s = BOD.R - M.r_s; % Depth [z]
+M.r_s = sqrt(M.r(M.ind) .* M.r(M.ind+1));  % Radius from center of body [m]
+M.z_s = BOD.R - M.r_s;                     % Depth [m]
 
 % Define element (staggered node) volumes, surface areas, and length scales
-M.V_s = (4/3) * pi * (M.r(M.refInd+1).^3-M.r(M.refInd).^3);
+M.V_s = (4/3) * pi * (M.r(M.ind+1).^3-M.r(M.ind).^3);
 M.A   = 4 * pi * M.r.^2;
-M.L   = M.V_s./M.A(M.refInd+1);  % characteristic length scale
+M.L   = M.V_s./M.A(M.ind+1);  % characteristic length scale
+
+%%%%%%%%%%%%%%%%%%%%%%
+% ICE
+%%%%%%%%%%%%%%%%%%%%%%
 
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+

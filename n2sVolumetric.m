@@ -12,9 +12,9 @@
 % staggered elements
 function [prop_s] = n2sVolumetric(M,prop)
 
-f1 = (M.r_s(M.refInd).^3 - M.r(M.refInd).^3)./  (M.r(M.refInd+1).^3 - M.r(M.refInd).^3); % Weighting for element i
-f2 = (M.r(M.refInd+1).^3 - M.r_s(M.refInd).^3)./(M.r(M.refInd+1).^3 - M.r(M.refInd).^3); % Weighting for element i+1
+f1 = (M.r_s(M.ind).^3 - M.r(M.ind).^3)./  (M.r(M.ind+1).^3 - M.r(M.ind).^3); % Weighting for element i
+f2 = (M.r(M.ind+1).^3 - M.r_s(M.ind).^3)./(M.r(M.ind+1).^3 - M.r(M.ind).^3); % Weighting for element i+1
 
-prop_s = f1 .* prop(M.refInd) + f2 .* prop(M.refInd+1);
+prop_s = f1 .* prop(M.ind) + f2 .* prop(M.ind+1);
 
 end

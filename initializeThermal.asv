@@ -20,18 +20,15 @@ Es     = 3.8e26;      % Solar output [W]
 % Search array
 TsurfTemp = linspace(10,273,1000); % Surface temperature range to search [K]
 
-
 %%%%%%%%%%%%%%%%%%%%%%%
 % Radiogenic heat flux
 %%%%%%%%%%%%%%%%%%%%%%%
 qRad = BOD.m * 4.5e-12 / (4 * pi * BOD.R^2); % Radiogenic heat flux [W/m^2]
 
-
 %%%%%%%%%%%%%%%%%%%%%%%
 % Emissive heat flux
 %%%%%%%%%%%%%%%%%%%%%%%
 qEmis = BOD.eps * sigma * TsurfTemp.^4;
-
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Solar insolation heat flux
@@ -41,7 +38,6 @@ Fs0  = Es / (4 * pi * BOD.RParent^2);   % solar insolation at equatiorial high n
 clat = 90 - IN.lat;                         % Co-latitude
 Fs   = Fs0 * sqrt((BOD.ob*pi/180)^2 + (clat*pi/180)^2) / (pi * sqrt(2)); % Obliquity and colatitude correction
 qSol = (1-BOD.A) * Fs; % Average annual solar insolation [W/m^2]
-
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Sublimation heat flux
@@ -62,14 +58,12 @@ P = 10.^(pA./TsurfTemp + pB); % partial pressure [Pa]
 % heat flux
 qSub = L .* P .* sqrt(m./(2 * pi * R * TsurfTemp));
 
-
 %%%%%%%%%%%%%%%%%%%%%%%
 % Required Geologic Heat Flux [W/m^2]
 %%%%%%%%%%%%%%%%%%%%%%%
 qIn   = qSol;          % Paid into heat budget
 qOut  = qEmis + qSub; % Withdrawn from heat budget
 qAnom = qOut-qIn;     % Anomalous heat flux
-
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Find Nominal Surface Temp
@@ -100,7 +94,6 @@ M.qSol    = qSol; % Solar insolation heat flux
 M.qRad    = qRad; % Radiogenic heat flux
 M.qLoss   = qIce; % Heat flux from interior through ice shell [W/m^2]
 
-
 %%%%%%%%%%%%%%%%%%%%%%%
 % Now, thermal structure can be created
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -108,7 +101,6 @@ M.T = zeros(1,M.Nz);
 
 % Enforce space BCs
 M.T(end) = M.Tsurf_0;
-
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % ICE
@@ -136,7 +128,6 @@ end
 
 M.T(t_ind) = T;
 
-
 %%%%%%%%%%%%%%%%%%%%%%%
 % Ocean
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -146,7 +137,6 @@ t_ind  = find(M.r>=r1 & M.r<=r2); % Temporary indexing
 
 % Enforce ocean
 M.T(t_ind) = IN.Tm_ocn;
-
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % ROCK
@@ -235,12 +225,7 @@ M.mRes = []; % Reservoir mass
 %%%%%%%%%%%%%%%%%%%%%%%
 % Get Thermal Properties
 %%%%%%%%%%%%%%%%%%%%%%%
-M.k   = zeros(1,M.Nz);
-M.rho = zeros(1,M.Nz);
-M.Cp  = zeros(1,M.Nz);
-
-[M] = getPressure(M,BOD);
-[M] = getThermalProperties(M,IN);
+[M]  = getThermalProperties(M, BOD);
 
 end
 

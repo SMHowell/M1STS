@@ -17,10 +17,10 @@ M = getHeating(M);
 M = getSurfaceHeatFlux(M,IN,BOD);
 
 % Initialize temperature change array
-M.dT = zeros(1,IN.Nz); % Primary nodes
+M.dT = zeros(1,M.Nz); % Primary nodes
 
 % Main thermal diffusion solve
-refIndT = 2:IN.Nz -1; % indices of solution
+refIndT = 2:M.Nz -1; % indices of solution
  
 % Prefactor
 A = - 2 * M.dt ./ (M.rho(refIndT).*M.Cp(refIndT).*M.r(refIndT).^2.*(M.dr(refIndT-1)+M.dr(refIndT)));

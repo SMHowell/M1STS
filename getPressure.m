@@ -8,20 +8,55 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Initialize Body
-BOD = getBodyParameters(IN);
+function [M] = getPressure(M,BOD)
 
-% Initialize Grid
-M = initializeGrid(IN,BOD);
+ % Guestimate -- *** REPLACE THIS ***
+rhoOcn   = 1000;  % Density [kg/m^3]
+rho0_sil = 3275;  % Reference Density [kg/m^3]
 
-% Initialize porosity
-M.phi = zeros(size(M.r));
+P_min = (BOD.R-M.rSil)  * rhoOcn * BOD.g;
+P_max = (M.rSil-M.rIrn) * rho0_sil * BOD.g;
+M.P   = linspace(P_min,P_max,M.Nz);
 
-% Initialize Thermal Structure
-[IN, M] = initializeThermal(IN,BOD,M);
+end
 
-% Initialize Time
-[IN, M] = initializeTime(IN,M);
 
-% Initialize Outputs
-[OUT,MISC] = initializeOutputs(IN,M);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

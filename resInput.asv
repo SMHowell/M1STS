@@ -45,7 +45,7 @@ IN.H0_H2O = 130e3;    % Initial hydrosphere thickness [m]
 IN.H0_irn = 500e3;    % Initial iron core thickness   [m]
 
 IN.T0_irn = 1000;     % Initial isothermal core temperature [K]
-IN.Tm_ocn = 273;      % Melting temp of ocean [K] 
+IN.Tm_ocn = 273;         % Melting temp of ocean [K] 
 
 % NOTE: You always want at least 3 full elements between the surface and
 % top of your reservoir, and b/w the bottom of the reservoir and ice-ocean

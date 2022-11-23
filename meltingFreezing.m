@@ -32,17 +32,17 @@ dv = dm/M.rhoOcn; % Total change in melt volume
 M.dm_dt = dm/M.dt;
 
 % New interface location
-M.rOcnTop = ((3/(4*pi))*dv+M.rOcnTop^3)^(1/3);
-M.iOcnTop = find((M.rOcnTop - M.r>0)>0,1,'last');
+M.rOcn = ((3/(4*pi))*dv+M.rOcn^3)^(1/3);
+M.iOcnTop = find((M.rOcn - M.r>0)>0,1,'last');
 
 % Set melt fractions
-M.vfm(M.r_s<M.rOcnTop) = 1;
-M.vfm(M.r_s>M.rOcnTop) = 0;
-M.vfm(M.iOcnTop)       = (4/3)*pi*(M.rOcnTop^3 - M.r(M.iOcnTop)^3)/M.V_s(M.iOcnTop);
+M.vfm(M.r_s<M.rOcn) = 1;
+M.vfm(M.r_s>M.rOcn) = 0;
+M.vfm(M.iOcnTop)       = (4/3)*pi*(M.rOcn^3 - M.r(M.iOcnTop)^3)/M.V_s(M.iOcnTop);
 
 % Restore correct temperatures now that energy is back in the right place
 M.T(M.T >IN.Tm_ocn) = IN.Tm_ocn;
-M.T(M.r<=M.rOcnTop) = IN.Tm_ocn;
+M.T(M.r<=M.rOcn) = IN.Tm_ocn;
 
 % Calculate change in melt
 dE = dE_ocn + dE_ice;
@@ -52,16 +52,16 @@ dv = dm/M.rhoOcn; % Total change in melt volume
 M.dm_dt = dm/M.dt;
 
 % New interface location
-M.rOcnTop = ((3/(4*pi))*dv+M.rOcnTop^3)^(1/3);
-M.iOcnTop = find((M.rOcnTop - M.r>0)>0,1,'last');
+M.rOcn = ((3/(4*pi))*dv+M.rOcn^3)^(1/3);
+M.iOcnTop = find((M.rOcn - M.r>0)>0,1,'last');
 
 % Set melt fractions
-M.vfm(M.r_s<M.rOcnTop) = 1;
-M.vfm(M.r_s>M.rOcnTop) = 0;
-M.vfm(M.iOcnTop) = (4/3)*pi*(M.rOcnTop^3 - M.r(M.iOcnTop)^3)/M.V_s(M.iOcnTop);
+M.vfm(M.r_s<M.rOcn) = 1;
+M.vfm(M.r_s>M.rOcn) = 0;
+M.vfm(M.iOcnTop) = (4/3)*pi*(M.rOcn^3 - M.r(M.iOcnTop)^3)/M.V_s(M.iOcnTop);
 
 % Restore correct temperatures now that energy is back in the right place
-M.T(M.r<=M.rOcnTop) = IN.Tm_ocn;
+M.T(M.r<=M.rOcn) = IN.Tm_ocn;
 
 
 %%%%%%%%%%%%%%%%%%
@@ -148,7 +148,7 @@ if M.vRes>0
         M.T(M.iResTop) = M.T(M.iResTop)+dT;
         
         % Close out frozen reservoir
-        M.vfm(M.r_s>M.rOcnTop) = 0;
+        M.vfm(M.r_s>M.rOcn) = 0;
         M.iResBot = M.iResTop;
         rResMean  = mean([M.rResTop,M.rResBot]);
         M.rResTop = rResMean;
@@ -158,7 +158,7 @@ if M.vRes>0
         M.fV    = 1;  % Reservoir frozen fraction
         M.mRes  = 0; % Reservoir mass
         
-    elseif M.rResBot <= M.rOcnTop
+    elseif M.rResBot <= M.rOcn
         % Ice shell melted to reservoir depth
         error('Ice Shell Melted Through.');
     else 
