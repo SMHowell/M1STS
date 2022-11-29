@@ -27,7 +27,7 @@ while M.t < IN.tMax
     M = thermalSolver(M,BOD,IN);
         
     % Move interfaces
-    M = meltingFreezing(M,IN);
+    M = meltingFreezing(M,IN,BOD);
     
     % Update time 
     M.t    = M.t + M.dt;
@@ -37,7 +37,7 @@ while M.t < IN.tMax
     M = reservoirEmplacement(M,IN);
     
     % Update thermal properties
-    M = getThermalProperties(M,IN);
+    M = getThermalProperties(M,BOD);
     
     % Check for convection
     [M] = getConvection(M);

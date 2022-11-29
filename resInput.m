@@ -20,7 +20,7 @@ clear; clc;
 % Model Timing
 %%%%%%%%%%%%%%%%%%
 IN.tMax  = '4 Gyr';   % Model run time, use 'yr' 'kyr' 'Myr' or 'Gyr'
-IN.tOut  = '1 Myr';   % Output Frequency
+IN.tOut  = '0.1 Myr';   % Output Frequency
 IN.pltOn = 1;         % Plot output in real time
 IN.movOn = 0;         % Save plot movie
 
@@ -41,7 +41,7 @@ IN.dz_H2O = 1e3;      % Minimum resolution in H2O layer [m]
 IN.dz_sil = 50e3;     % Minimum resolution in rock [m]
 IN.dz_irn = 20e3;     % Minimum resolution in core [m]
 
-IN.H0_ice = 25e3;    % Initial ice shell thickness   [m]
+IN.H0_ice = 130e3;    % Initial ice shell thickness   [m]
 IN.H0_H2O = 130e3;    % Initial hydrosphere thickness [m]
 IN.H0_irn = 500e3;    % Initial iron core thickness   [m]
 

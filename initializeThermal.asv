@@ -234,7 +234,9 @@ M.dm_dt = 0;  % Change in melt mass vs time
 
 % Partial melt fractions
 % *volume* fraction (on elements)
-M.vpfm  = zeros(1,M.Nz-1);         
+M.vfm   = zeros(1,M.Nz-1);         
+M.vfm(M.r>=M.rSil & M.r< M.rOcn) = 1; % Impose ocean
+M.dm_dt = 0;  % Change in melt mass vs time
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Initialize reservoir/ocean parameters

@@ -14,19 +14,12 @@ function [M] = meltingFreezing(M,IN,BOD)
 % Ocean Melting/Freezing
 %%%%%%%%%%%%%%%%%%
 
-% % Calculate excess energy in the ice shell
-% if isempty(M.rResBot) % No melts in the ice
-%     % Excess energy at the ice-ocean interface (T > Tmelt)
-%     dEice_bot = (M.T(M.iOcnTop+1)-IN.Tm_ocn)*M.rho(M.iOcnTop+1)*M.Cp(M.iOcnTop+1)*(4/3)*pi*(M.r_s(M.iOcnTop+1)^3 - M.rOcn^3);
-%     
-%     % Excess energy within the ice shell (e.g. from tidal heating)
-%     iceInd    = M.iOcnTop+1:M.Nz-1;
-%     
-%     dEice_bot
-% else
-%     
-% end
-
+% Check whether the interface has warmed above Tm
+if isempty(M.rResBot) % No melts in the ice
+    iceInd = M.iOcnTop+1:M.Nz-1;
+else
+    M.vfm(M.r_s>=M.rSil & M < M.rResBot) = 0;
+end
 
 dEice_top = (M.T(M.iOcnTop+1)-IN.Tm_ocn)*M.rho(M.iOcnTop+1)*M.Cp(M.iOcnTop+1)*(4/3)*pi*(M.r_s(M.iOcnTop+1)^3 - M.rOcn^3);
 dEice_top(dEice_top<0) = 0;         % Ice is allowed to be colder than melting
@@ -66,14 +59,13 @@ if (M.rOcn <= M.rSil) && (abs(dE)>0)
     end
     M.iOcnBot = M.iOcnTop;
     M.rOcn    = M.rSil;
-    
 else
     % Nominal case
     % Set melt fractions
     M.vfm(M.r_s>M.rSil & M.r_s<M.rOcn) = 1;
     M.vfm(M.r_s>M.rOcn | M.r_s<M.rSil) = 0;
     M.vfm(M.iOcnTop) = (4/3)*pi*(M.rOcn^3 - M.r(M.iOcnTop)^3)/M.V_s(M.iOcnTop);
-    M.vfm(M.iOcnBot) = (4/3)*pi*(M.rOcn^3  -M.rSil^3)/M.V_s(M.iOcnBot);    
+    M.vfm(M.iOcnBot) = (4/3)*pi*(M.r(M.iOcnBot+1)^3-M.rSil^3)/M.V_s(M.iOcnBot);    
     
     % Restore correct temperatures now that energy is back in the right place
     M.T(M.r>=M.rSil & M.r<=M.rOcn) = IN.Tm_ocn;

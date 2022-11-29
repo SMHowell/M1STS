@@ -10,6 +10,9 @@
 
 function [BOD] = getBodyParameters(IN)
 
+%%%%%%%%%%%%%%%%%%%%%%%
+% Body Properties
+%%%%%%%%%%%%%%%%%%%%%%%
 % Add bodies as new cases below
 switch IN.body
     case 'Europa'
@@ -28,9 +31,42 @@ switch IN.body
         
 end
 
-% Parameters common to all bodies
-% Ice Properties
-BOD.GH2O  = 3e9;    % Elastic modulus of ice (GPa)
-BOD.EaH2O = 59.4e3; % Activation Energy [J mol-1] 
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% Parameters and Materials common to all bodies
+%%%%%%%%%%%%%%%%%%%%%%%
+% General Properties
+BOD.vfmCr      = 0.40;   % Melt fraction required for disaggregation (~0.4 - 0.6):
+                         % https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1029/2002JE001943
+BOD.aMelt      = 30;     % Exponent on melt-fraction dependence of viscosity: 
+                         % soest.hawaii.edu/GG/FACULTY/smithkonter/GG631/other/HirthKohlstedt_2000.pdf
+                        
+% H2O Properties
+BOD.GH2O       = 3e9;    % Elastic modulus of ice (GPa)
+BOD.EaH2O      = 59.4e3; % Activation Energy [J mol-1] 
+BOD.LH2O       = 330e3;  % Latent heat of fusion [kJ/kg]
+BOD.etaOcn_0   = 1e-3;   % Viscosity of melt water [Pa s]
+
+BOD.rhoOcn     = 1000;   % Density [kg/m^3]
+BOD.CpOcn      = 4184;   % Specific heat capacity [J/kg K]
+BOD.rhoIce_0   = 917;    % Ice reference density [kg/m^3]
+BOD.Tice_0     = 273;    % Reference temeprature for laws [K]
+ 
+% Rock: https://www.sciencedirect.com/science/article/pii/S0031920113000289
+% using forsterite (Mg-olivine) as representative
+BOD.TmSil      = 1300;  % Melting temp of rock [K] 
+BOD.kSil       = 4.0;   % Thermal conductivity [W/mK]
+BOD.Lsil       = 418e3; % Latent heat of fusion [kJ/kg]
+BOD.rhoSil_0   = 3275;  % Reference Density [kg/m^3]
+BOD.Tsil_0     = 300;   % Reference temeprature for laws [K] 
+                         
+BOD.TmIrn      = 1260;  % Melting temp of iron [K] 
+BOD.kIrn_0     = 27.0;  % Thermal conductivity [W/mK]
+BOD.rhoIrn_0   = 5428;  % Density [kg/m^3]
+BOD.rhoIrn_m_0 = 5240;  % Density [kg/m^3]
+BOD.CpIrn_0    = 450;   % Specific heat capacity [J/kg K]
+BOD.CpIrn_m_0  = 820;   % Specific heat capacity of melt [J/kg K]
+BOD.Lirn       = 247e3; % Latent heat of fusion [kJ/kg]
+
 
 end

@@ -25,12 +25,8 @@ M.etaVE = Z.*etaDiff;
 [vpfm] = s2nVolumetric(M,M.vpfm); % Melt fraction on the nodes 
 iceInd = (M.iOcnTop+2:M.Nz-1);    % Indices contained entirely w/in the ice shell
 etaIce = M.etaVE(iceInd).*exp(-BOD.aMelt*vpfm(iceInd));
-
-% Einstein Roscoe relationship above BOD.vfmCr
-etaRE = BOD.etaOcn_0.*(1.35*vpfm(iceInd)-0.35).^(-5/2);
-
-% Composite
+etaIce(
 M.etaVE(iceInd) = etaIce;
-
+eta = M.etaVE(iceInd)*(1.35f–0.35)5/2
 
 end

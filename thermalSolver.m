@@ -44,11 +44,11 @@ q_B = - M.Nu(refIndT)   .* k_B .* (M.T(refIndT+1)-M.T(refIndT)) ./ (M.dr(refIndT
 Q_A = r_A.^2 .* q_A;
 Q_B = r_B.^2 .* q_B;
 
-% Get neat heat into ocean and other reservoirs
-[M] = getReservoirEnergy(M,Q_A,Q_B);
-
 % Apply heat flow boundary conditions
 Q_B(end) = M.qLoss * BOD.R^2;
+
+% Get neat heat into ocean and other reservoirs for melting/freezing
+[M] = getReservoirEnergy(M,Q_A,Q_B);
 
 % Temperature change
 M.dT(refIndT) = A .* (Q_B - Q_A) + (M.dt./(M.rho(refIndT) .* M.Cp(refIndT))) .* M.H(refIndT);
