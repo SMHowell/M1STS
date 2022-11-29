@@ -37,16 +37,18 @@ k_B = (M.k(refIndT+1).*M.k(refIndT).*(M.r(refIndT+1)-M.r(refIndT)))./(M.k(refInd
 [k_A, k_B] = convectiveConductivity(M,k_A,k_B);
 
 % Staggered node heat fluxes
-q_A = - M.Nu * k_A .* (M.T(refIndT)-M.T(refIndT-1)) ./ (M.dr(refIndT-1));
-q_B = - M.Nu * k_B .* (M.T(refIndT+1)-M.T(refIndT)) ./ (M.dr(refIndT));
+q_A = - M.Nu(refIndT-1) .* k_A .* (M.T(refIndT)-M.T(refIndT-1)) ./ (M.dr(refIndT-1));
+q_B = - M.Nu(refIndT)   .* k_B .* (M.T(refIndT+1)-M.T(refIndT)) ./ (M.dr(refIndT));
 
 % Staggered node heat flows
 Q_A = r_A.^2 .* q_A;
 Q_B = r_B.^2 .* q_B;
 
+% Get neat heat into ocean and other reservoirs
+[M] = getReservoirEnergy(M,Q_A,Q_B);
+
 % Apply heat flow boundary conditions
-Q_A(M.iOcnTop) = M.QIce_0/(4 * pi);
-Q_B(end)       = M.qLoss * BOD.R^2;
+Q_B(end) = M.qLoss * BOD.R^2;
 
 % Temperature change
 M.dT(refIndT) = A .* (Q_B - Q_A) + (M.dt./(M.rho(refIndT) .* M.Cp(refIndT))) .* M.H(refIndT);
@@ -55,9 +57,9 @@ M.dT(refIndT) = A .* (Q_B - Q_A) + (M.dt./(M.rho(refIndT) .* M.Cp(refIndT))) .* 
 M.T      = M.T + M.dT;
 
 % Apply boundary conditions to ghost nodes
-M.Tsurf  = M.T(end-1);
-M.T(end) = M.Tsurf; % Zero out dT in space
-M.T(1)   = IN.Tm_ocn;
+M.Tsurf  = M.T(end-1); % Track new surface temperature
+M.T(end) = M.Tsurf;    % Zero out dT in space
+M.T(1)   = M.T(2);     % dT/dr = 0 at r = 0
 
 end
 

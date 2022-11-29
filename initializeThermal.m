@@ -200,14 +200,15 @@ else
 end
 
 M.T(t_ind) = T;
+M.T(1)     = M.T(2); % dT/dr -> 0 at r = 0
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Initialize melts
 %%%%%%%%%%%%%%%%%%%%%%%
 % *volume* fraction (on elements)
-M.vfm   = zeros(1,M.Nz-1);
-M.vfm(M.r>M.rSil & M.r<=M.rOcn) = 1; % Impose ocean
+M.vfm   = zeros(1,M.Nz-1);         
+M.vfm(M.r>=M.rSil & M.r< M.rOcn) = 1; % Impose ocean
 M.dm_dt = 0;  % Change in melt mass vs time
 
 
@@ -217,9 +218,9 @@ M.dm_dt = 0;  % Change in melt mass vs time
 M.fV     = 0; % Frozen volume fraction of reservoir
 M.resEmp = 0; % Flag for empalcement of reservoir
 
-% Track interface(s)
-M.iOcnTop = find(M.vfm>0,1,'last'); % Ocean top interface element index
-M.rOcn    = M.rOcn;                 % Ocean top interface radius
+% Track element containing interface
+M.iOcnTop = find((M.vfm>0 & M.r_s >= M.rSil & M.r_s <= M.rOcn),1,'last'); % Ocean top interface element index
+M.iOcnBot = find((M.vfm>0 & M.r_s >= M.rSil & M.r_s <= M.rOcn),1,'first'); % Ocean bottom interface element index
 
 M.iResTop = []; % Reservoir top interface element index
 M.rResTop = []; % Reservoir top interface radius
@@ -241,6 +242,14 @@ M.Cp  = zeros(1,M.Nz);
 
 [M] = getPressure(M,BOD);
 [M] = getThermalProperties(M,IN);
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% Nusselt Number on Elements
+%%%%%%%%%%%%%%%%%%%%%%%
+M.Ra_cr = 0; % Critical Rayleigh Number
+M.Nu    = ones(1,M.Nz-1);
+
 
 end
 

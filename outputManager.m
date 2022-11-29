@@ -60,8 +60,11 @@ if IN.outInd * IN.tOut < M.t
     %%%%%%%%%%%%%%%%%%
     MISC.outTime = outTime;
     MISC.unit = unit;
-    [MISC] = polarPlot(IN,M,OUT,MISC);
-    
+    if IN.resOn
+        [MISC] = polarPlotRes(IN,M,OUT,MISC);
+    else
+        [MISC] = polarPlotInt(IN,M,OUT,MISC);
+    end
     
     if (IN.outInd == IN.NOut)
         if IN.resOn

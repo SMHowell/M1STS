@@ -37,7 +37,10 @@ while M.t < IN.tMax
     M = reservoirEmplacement(M,IN);
     
     % Update thermal properties
-    M = getThermalProperties(M);
+    M = getThermalProperties(M,IN);
+    
+    % Check for convection
+    [M] = getConvection(M);
     
     % Generate Output
     [IN, OUT, MISC] = outputManager(M,IN,BOD,OUT,MISC);

@@ -17,6 +17,9 @@ k_intf   = (sum(V_intf.*vfs_intf./M.k(M.iOcnTop-1:M.iOcnTop+1))./ sum(V_intf))^(
 k_A(M.iOcnTop-1:M.iOcnTop+1) = k_intf;
 k_B(M.iOcnTop-2:M.iOcnTop)   = k_intf;
 
+k_A(M.iOcnBot-1:M.iOcnBot+1) = k_intf;
+k_B(M.iOcnBot-2:M.iOcnBot)   = k_intf;
+
 % Set thermal conductivity on interface elements for the reservoir top and
 % bottom if they have been prescribed
 if M.vRes>0      
