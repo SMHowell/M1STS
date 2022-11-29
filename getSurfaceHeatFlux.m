@@ -8,7 +8,7 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function M = getSurfaceHeatFlux(M,IN,BOD)
+function M = getSurfaceHeatFlux(M,BOD)
 
 % Current surface temp 
 Tsurf = M.Tsurf; 
@@ -17,21 +17,11 @@ Tsurf = M.Tsurf;
 sigma  = 5.67e-8;     % Stefan Boltzamnn constant [W m^-2 K^-4]
 m      = 18.01528e-3; % Molar weight of H2O [kg mol^-1]
 R      = 8.314;       % Ideal gas constant [J mol^-1 K^-1]
-Es     = 3.8e26;      % Solar output [W]
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Emissive heat flux
 %%%%%%%%%%%%%%%%%%%%%%%
 M.qEmis = BOD.eps * sigma * Tsurf.^4;
-
-%%%%%%%%%%%%%%%%%%%%%%%
-% Solar insolation heat flux
-%%%%%%%%%%%%%%%%%%%%%%%
-% Oj + Stev https://reader.elsevier.com/reader/sd/pii/0019103589900523
-Fs0  = Es / (4 * pi * BOD.RParent^2);   % solar insolation at equatiorial high noon [W/m^2]
-clat = 90 - IN.lat;                     % Co-latitude
-Fs   = Fs0 * sqrt((BOD.ob*pi/180)^2 + (clat*pi/180)^2) / (pi * sqrt(2)); % Obliquity and colatitude correction
-M.qSol = (1-BOD.A) * Fs; % Average annual solar insolation [W/m^2]
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Sublimation heat flux

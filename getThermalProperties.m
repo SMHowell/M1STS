@@ -14,7 +14,7 @@ function [M] = getThermalProperties(M,IN)
 %%%%%%%%%%%%%%%%%%%%%%%
 rhoOcn   = 1000;  % Density [kg/m^3]
 CpOcn    = 4184;  % Specific heat capacity [J/kg K]
-M.LH2O   = 330e3; % Latent heat of fusion [kJ/kg]
+LH2O     = 330e3; % Latent heat of fusion [kJ/kg]
 rho0_ice = 917;   % Ice reference density [kg/m^3]
 T0_ice   = 273;   % Reference temeprature for laws [K]
  
@@ -22,7 +22,7 @@ T0_ice   = 273;   % Reference temeprature for laws [K]
 % using forsterite
 Tm_sil   = 1300;  % Melting temp of rock [K] 
 k_sil    = 4.0;   % Thermal conductivity [W/mK]
-M.Lsil   = 418e3; % Latent heat of fusion [kJ/kg]
+Lsil     = 418e3; % Latent heat of fusion [kJ/kg]
 rho0_sil = 3275;  % Reference Density [kg/m^3]
 T0_sil   = 300;   % Reference temeprature for laws [K] 
  
@@ -164,10 +164,13 @@ M.K = M.k./(M.rho .* M.Cp);
 M.Tm_ocn = IN.Tm_ocn; % Melt temperature in ocean
 M.rhoOcn = rhoOcn;    % Density in ocean
 M.CpOcn  = CpOcn;     % Specific heat capacity in ocean
- 
+M.LH2O   = LH2O;      % Latent heat of fusion 
+
 M.Tm_res = IN.Tm_ocn; % Melt temperature in reservoir
 M.rhoRes = rhoOcn;    % Density in reservoir
 M.CpRes  = CpOcn;     % Specific heat capacity in reservoir
+
+M.Lsil   = Lsil;      % Latent heat of fusion 
  
 end
  

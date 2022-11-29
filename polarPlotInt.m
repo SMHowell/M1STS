@@ -39,7 +39,7 @@ if IN.pltOn
     end
     
     % Select current figure without stealing focus
-    set(0,'CurrentFigure',MISC.fg); clf; whitebg('k'); set(gcf,'color','k');
+    set(0,'CurrentFigure',MISC.fg); clf; set(gcf,'color','k');
     fontSize = 24;
     
     
@@ -56,7 +56,7 @@ if IN.pltOn
     sp2    = subplot(122);
     Tpol   = M.T;  % Radial Temperatue
     width  = pi;   % Radial span (radians)
-    theta  = linspace(- width/2,width/2,length(rPol)); % Polar angle
+    theta  = linspace(pi - width/2,pi + width/2,length(rPol)); % Polar angle
 
     % Create plottable grids from 1D arrays
     [~,R2] = meshgrid(theta,rPol);      % Radius
@@ -70,60 +70,108 @@ if IN.pltOn
 
     xlabel('Radial Distance [km]');
     ylabel('Radial Distance [km]');
-    set(h,'linestyle','none'); axis equal tight; shading interp;
-        
-    %%% Boundaries
-    hold on;
+    set(h,'linestyle','none'); axis equal; shading interp;
+    zRnd = 1e3*ceil(M.z(1)/1e6);
+    axis([-zRnd, zRnd, -zRnd, zRnd]);
     
-    % Surface
-    r    = M.r(end-1)/1e3;
-    xBnd = r * cos(theta); yBnd = r * sin(theta); h = plot(xBnd, yBnd);
-    set(h,'color','w','linewidth',2)
+    %%% Boundaries
+    hold on; alpha = 0.85;
     
     % Ice shell
-    r    = M.rOcn/1e3;
-    xBnd = r * cos(theta); yBnd = r * sin(theta); h = plot(xBnd, yBnd);
-    set(h,'color','w','linewidth',2)
+    color = 'cyan';
+    r1 = M.r(end-1)/1e3; 
+    r2 = M.rOcn/1e3;
+    xBnd1 = r1 * cos(theta+pi); yBnd1 = r1 * sin(theta+pi); 
+    xBnd2 = r2 * cos(theta+pi); yBnd2 = r2 * sin(theta+pi); 
+    fill([xBnd1,xBnd2], [yBnd1,yBnd2],color,'facealpha',alpha);
+    plot(-xBnd1, -yBnd1,'color','k');
+    
+    % Ocean
+    color = [0.5843    0.8157    0.9882];
+    r1 = M.rOcn/1e3; 
+    r2 = M.rSil/1e3;
+    xBnd1 = r1 * cos(theta+pi); yBnd1 = r1 * sin(theta+pi); 
+    xBnd2 = r2 * cos(theta+pi); yBnd2 = r2 * sin(theta+pi); 
+    fill([xBnd1,xBnd2], [yBnd1,yBnd2],color,'facealpha',alpha);
+    plot(-xBnd1, -yBnd1,'color','k');
     
     % Mantle
-    r    = M.rSil/1e3;
-    xBnd = r * cos(theta); yBnd = r * sin(theta); h = plot(xBnd, yBnd);
-    set(h,'color','w','linewidth',2)
+    color = [0.7961    0.3765    0.0824];
+    r1 = M.rSil/1e3; 
+    r2 = M.rIrn/1e3;
+    xBnd1 = r1 * cos(theta+pi); yBnd1 = r1 * sin(theta+pi); 
+    xBnd2 = r2 * cos(theta+pi); yBnd2 = r2 * sin(theta+pi); 
+    fill([xBnd1,xBnd2], [yBnd1,yBnd2],color,'facealpha',alpha);
+    plot(-xBnd1, -yBnd1,'color','k');
     
     % Core
-    r    = M.rIrn/1e3;
-    xBnd = r * cos(theta); yBnd = r * sin(theta); h = plot(xBnd, yBnd);
-    set(h,'color','w','linewidth',2)
-       
+    color = [1 1 1]/4;
+    r1 = M.rIrn/1e3; 
+    xBnd1 = r1 * cos(theta+pi); yBnd1 = r1 * sin(theta+pi); 
+    fill(xBnd1, yBnd1,color,'facealpha',alpha);
+    plot(-xBnd1, -yBnd1,'color','k');
+    
     %%% Make it Pretty
     set(gca,'fontsize',fontSize)
     colormap(parula(256));
 
     cb = colorbar;
-    ylabel(cb,'Temperature [K]','fontsize',fontSize)
+    ylabel(cb,'Temperature [K]','fontsize',fontSize);
+    set(cb,'xcolor','w','ycolor','w');
+    caxis([100,1300]);
     
-    set(gca,'layer','top')
-    title([num2str(MISC.outTime ,'%05.1f') ' '  MISC.unit],'fontname','Monowidth');
+    set(gca,'layer','top','color','k','xcolor','w','ycolor','w');
+    title([num2str(MISC.outTime ,'%05.1f') ' '  MISC.unit],'fontname','Monowidth','color','w');
     
     %%%%%%%%%%%%%%%%%%%%%%%
-    % Temperature and Frozen Fraction
+    % Temperature 
     %%%%%%%%%%%%%%%%%%%%%%%
-    
-    % Temperature
     sp1 = subplot(121);
-    plot([fliplr(Tpol),Tpol],[-fliplr(rPol),rPol]);
+    Tmax = 2000;
+        
+    %%% Boundaries
+    hold on; alpha = 0.35;
+    
+    % Ice
+    color = 'cyan';
+    r1 = M.r(end-1)/1e3; r2 = M.rOcn/1e3;     
+    fill([0,Tmax,Tmax,0,0], [r2,r2,r1,r1,r2],color,'facealpha',alpha)
+    fill([0,Tmax,Tmax,0,0],-[r2,r2,r1,r1,r2],color,'facealpha',alpha)
+    
+    % Ocean
+    color = [0.5843    0.8157    0.9882];
+    r1 = M.rOcn/1e3; r2 = M.rSil/1e3;     
+    fill([0,Tmax,Tmax,0,0], [r2,r2,r1,r1,r2],color,'facealpha',alpha)
+    fill([0,Tmax,Tmax,0,0],-[r2,r2,r1,r1,r2],color,'facealpha',alpha) 
+    
+    % Mantle
+    color = [0.7961    0.3765    0.0824];
+    r1 = M.rSil/1e3; r2 = M.rIrn/1e3;     
+    fill([0,Tmax,Tmax,0,0], [r2,r2,r1,r1,r2],color,'facealpha',alpha)
+    fill([0,Tmax,Tmax,0,0],-[r2,r2,r1,r1,r2],color,'facealpha',alpha) 
+    
+    % Core
+    color = 'white';
+    r1 = M.rIrn/1e3; r2 = -r1;     
+    fill([0,Tmax,Tmax,0,0], [r2,r2,r1,r1,r2],color,'facealpha',alpha)
+    
+    %%% Temperature
+    plot([fliplr(Tpol),Tpol],[-fliplr(rPol),rPol],'w','linewidth',2);
+    
+    %%% Make it pretty
     xlabel('Temperature [K]');
     ylabel('Depth [km]');
-    axis([0, 3000,-M.z(1)/1e3,M.z(1)/1e3]);
-    set(gca,'fontsize',fontSize); grid on;box on;
+    axis([0, Tmax,-zRnd,zRnd]);
+    set(gca,'layer','top','color','k','xcolor','w','ycolor','w');
+    set(gca,'fontsize',fontSize); grid on; box on;
     
     %%%%%%%%%%%%%%%%%%%%%%%
     % Better Align
     %%%%%%%%%%%%%%%%%%%%%%%
     
-    set(sp1,'position',[0.08,0.10+(0.8-0.55)/2,0.233,0.55]);
-    set(sp2,'position',[0.38,0.10+(0.8-0.55)/2,0.233,0.55]);
-    set(sp3,'position',[0.73,0.10+(0.8-0.55)/2,0.233,0.55]);
+    set(sp1,'position',[0.10,0.15,0.233,0.75]);
+    set(sp2,'position',[0.45,0.15,2*0.233,0.75]);
+    drawnow;
     
     %%%%%%%%%%%%%%%%%%%%%%%
     % Movie Frames
@@ -132,7 +180,6 @@ if IN.pltOn
     if IN.movOn
         MISC.F1(IN.outInd) = getframe(gcf);
     end
-    drawnow
     
     % Save movie to file
     if (IN.outInd == IN.NOut) && IN.movOn

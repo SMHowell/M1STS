@@ -18,7 +18,7 @@ R      = 8.314;       % Ideal gas constant [J mol^-1 K^-1]
 Es     = 3.8e26;      % Solar output [W]
 
 % Search array
-TsurfTemp = linspace(10,273,1000); % Surface temperature range to search [K]
+Tsearch = linspace(10,100,1000); % Surface temperature range to search [K]
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -30,17 +30,36 @@ qRad = BOD.m * 4.5e-12 / (4 * pi * BOD.R^2); % Radiogenic heat flux [W/m^2]
 %%%%%%%%%%%%%%%%%%%%%%%
 % Emissive heat flux
 %%%%%%%%%%%%%%%%%%%%%%%
-qEmis = BOD.eps * sigma * TsurfTemp.^4;
+qEmis = BOD.eps * sigma * Tsearch.^4;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Solar insolation heat flux
 %%%%%%%%%%%%%%%%%%%%%%%
 % Oj + Stev https://reader.elsevier.com/reader/sd/pii/0019103589900523
-Fs0  = Es / (4 * pi * BOD.RParent^2);   % solar insolation at equatiorial high noon [W/m^2]
-clat = 90 - IN.lat;                         % Co-latitude
-Fs   = Fs0 * sqrt((BOD.ob*pi/180)^2 + (clat*pi/180)^2) / (pi * sqrt(2)); % Obliquity and colatitude correction
-qSol = (1-BOD.A) * Fs; % Average annual solar insolation [W/m^2]
+% Average over latitude
+switch numel(IN.lat)
+    case 1
+        coLatEff = IN.lat;
+    case 2
+        % Find effective latitude. Knowing T~(q_sol)^4 and q_sol~(ob^2+coLat^2)^1/2,
+        % we develop a scaling to find the effective average. Away from the
+        % equator (where coLat > ob), effective latitude is:
+        coLat    = 90 - IN.lat; % Colatitude
+        coLatEff = ((4/5) * (coLat(2)^(5/4) - coLat(1)^(5/4)) / (coLat(2)-coLat(1))).^(4); % Effective colatitude
+        M.latEff = 90 - coLatEff; % Effective latitude
+    otherwise
+        % Find effective latitude. Knowing T~(q_sol)^-4 and q_sol~(ob^2+coLat^2)^1/2
+        % we develop a scaling to find the effective average. Away from the pole
+        % center (where coLat >> ob), effective latitude is:
+        coLat    = 90 - [min(IN.lat),max(IN.lat)]; % Colatitude
+        coLatEff = ((4/5) * (coLat(2)^(5/4) - coLat(1)^(5/4)) / (coLat(2)-coLat(1))).^(4); % Effective colatitude
+        M.latEff = 90 - coLatEff; % Effective latitude
+end
+
+Fs0      = Es / (4 * pi * BOD.RParent^2);  % solar insolation at equatiorial high noon [W/m^2]
+Fs       = Fs0 * sqrt((BOD.ob*pi/180)^2 + (coLatEff*pi/180).^2) / (pi * sqrt(2)); % Obliquity and colatitude correction
+qSol     = (1-BOD.A) * Fs;                 % Average annual solar insolation [W/m^2]
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -50,17 +69,17 @@ qSol = (1-BOD.A) * Fs; % Average annual solar insolation [W/m^2]
 % Polynomial curve fits to Table 2.1. R. R. Rogers; M. K. Yau (1989).
 % BOD.A Short Course in Cloud Physics (3rd ed.). Pergamon Press. p. 16.
 % ISBN 0-7506-3215-1.
-L = (2834.1 - 0.29*TsurfTemp - 0.004*TsurfTemp.^2)*1e3;
+L = (2834.1 - 0.29*Tsearch - 0.004*Tsearch.^2)*1e3;
 
 % Calculate the partial pressure of ice
 % https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/93GL00105
 % NOTE log = log10 in this paper, not ln
 pA = -2663.5; % empirical coefficient
 pB = 12.537;  % empirical coefficient
-P = 10.^(pA./TsurfTemp + pB); % partial pressure [Pa]
+P = 10.^(pA./Tsearch + pB); % partial pressure [Pa]
 
 % heat flux
-qSub = L .* P .* sqrt(m./(2 * pi * R * TsurfTemp));
+qSub = L .* P .* sqrt(m./(2 * pi * R * Tsearch));
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -74,18 +93,18 @@ qAnom = qOut-qIn;     % Anomalous heat flux
 %%%%%%%%%%%%%%%%%%%%%%%
 % Find Nominal Surface Temp
 %%%%%%%%%%%%%%%%%%%%%%%
-Tsurf_0_init  = interp1(qAnom,TsurfTemp,0); % First guess without geologic heatflow [K]
+Tsurf_0_init  = interp1(qAnom,Tsearch,0); % First guess without geologic heatflow [K]
 Tsurf_0       = Tsurf_0_init;              % Initial Surface temperature [K]
 z             = linspace(0,IN.H0_ice,1000); % Depth profile [m]
 
 dT_crit = 1e-5; % Convergence criterion for surface temperature [K]
 T_old   = 0;    % Old surface temperature [K]
 while abs(Tsurf_0-T_old) > dT_crit
-    T_z   = Tsurf_0*(IN.Tm_ocn/Tsurf_0).^(z/IN.H0_ice);            % Temperature profile
+    T_z   = Tsurf_0*(IN.Tm_ocn/Tsurf_0).^(z/IN.H0_ice);        % Temperature profile
     k     = mean(632 ./ T_z + 0.38 - 1.97e-3 .* T_z);          % Mean solid ice conductivity [W/m K]
     qIce  = (k * (IN.Tm_ocn - Tsurf_0)) * (1/IN.H0_ice + 1/BOD.R); % Heat flux through ice evaluated at the surface [W/m^2]
     T_old = Tsurf_0;                                           % Store previous result
-    Tsurf_0  = interp1(qAnom-qIce,TsurfTemp,0);                % New surface temperature guess
+    Tsurf_0  = interp1(qAnom-qIce,Tsearch,0);                % New surface temperature guess
 end
 
 
@@ -201,7 +220,7 @@ end
 
 M.T(t_ind) = T;
 M.T(1)     = M.T(2); % dT/dr -> 0 at r = 0
-
+M.T_init   = M.T;
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Initialize melts
@@ -219,8 +238,8 @@ M.fV     = 0; % Frozen volume fraction of reservoir
 M.resEmp = 0; % Flag for empalcement of reservoir
 
 % Track element containing interface
-M.iOcnTop = find((M.vfm>0 & M.r_s >= M.rSil & M.r_s <= M.rOcn),1,'last'); % Ocean top interface element index
-M.iOcnBot = find((M.vfm>0 & M.r_s >= M.rSil & M.r_s <= M.rOcn),1,'first'); % Ocean bottom interface element index
+M.iOcnTop = find((M.rOcn - M.r>0)>0,1,'last'); % Ocean top interface element index
+M.iOcnBot = find((M.rSil - M.r>0)>0,1,'last'); % Ocean bottom interface element indexd
 
 M.iResTop = []; % Reservoir top interface element index
 M.rResTop = []; % Reservoir top interface radius

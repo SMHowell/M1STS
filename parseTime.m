@@ -16,6 +16,11 @@ IN.kyr2s = 1e3 * IN.yr2s;   % Handy dandy conversion
 IN.Myr2s = 1e6 * IN.yr2s;   % Handy dandy conversion
 IN.Gyr2s = 1e9 * IN.yr2s;   % Handy dandy conversion
 
+
+% Convert body age
+IN.age = IN.age*IN.Gyr2s;
+
+
 % Parse final time
 timeStr = strsplit(IN.tMax);
 val     = str2double(timeStr{1});

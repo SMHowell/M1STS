@@ -10,10 +10,12 @@
 
 function [dt] = getTimestep(M)
 % Courant-Friedreichs-Lewy condition
-CFL = 1/10;
+CFL = 1/3;
 
 % Thermal diffusion timestep
-dt_th = min(M.L.^2) ./ max(M.K);
+% Estimate K on staggered nodes (imperfectly)
+[K_s] = n2sVolumetric(M,M.K);
+dt_th = min(M.L.^2 ./ K_s);
 
 % Radiative emission timestep (approx)
 dt_emis = (M.rho(end-1) * M.Cp(end-1) * M.Tsurf * M.L(end-1))/M.qSol;

@@ -19,8 +19,8 @@ clear; clc;
 %%%%%%%%%%%%%%%%%%
 % Model Timing
 %%%%%%%%%%%%%%%%%%
-IN.tMax  = '1 Myr';   % Model run time, use 'yr' 'kyr' 'Myr' or 'Gyr'
-IN.tOut  = '1 kyr';  % Output Frequency
+IN.tMax  = '4 Gyr';   % Model run time, use 'yr' 'kyr' 'Myr' or 'Gyr'
+IN.tOut  = '1 Myr';   % Output Frequency
 IN.pltOn = 1;         % Plot output in real time
 IN.movOn = 0;         % Save plot movie
 
@@ -28,23 +28,24 @@ IN.movOn = 0;         % Save plot movie
 %%%%%%%%%%%%%%%%%%
 % Body Settings
 %%%%%%%%%%%%%%%%%%
-IN.body = 'Europa';   % Target of interest
-IN.lat  = 0;          % Latitude of simulation (deg)
-
+IN.body     = 'Europa';  % Target of interest
+IN.lat      = [0, 90];   % Latitude (deg), can be a range e.g. [0, 90]
+IN.primComp = 'CI';      % Primordial Composition (CI, CM, CV, CO, CK, CR)
+IN.age      = 4.5;       % Body age [Gyr]
+IN.fmK      = 0.05;      % Mass fraction of radioactive K leeched to ocean
 
 %%%%%%%%%%%%%%%%%%
 % Geometry
 %%%%%%%%%%%%%%%%%%
-IN.dz_ice = 1e3;      % Minimum resolution in ice shell [m]
-IN.dz_ocn = 2e3;      % Minimum resolution in ocean [m]
-IN.dz_sil = 2e3;      % Minimum resolution in rock [m]
-IN.dz_irn = 2e3;      % Minimum resolution in core [m]
+IN.dz_H2O = 1e3;      % Minimum resolution in H2O layer [m]
+IN.dz_sil = 50e3;     % Minimum resolution in rock [m]
+IN.dz_irn = 20e3;     % Minimum resolution in core [m]
 
-IN.H0_ice = 25e3;     % Initial ice shell thickness   [m]
+IN.H0_ice = 25e3;    % Initial ice shell thickness   [m]
 IN.H0_H2O = 130e3;    % Initial hydrosphere thickness [m]
 IN.H0_irn = 500e3;    % Initial iron core thickness   [m]
 
-IN.T0_irn = 1000;     % Initial isothermal core temperature [K]
+IN.T0_irn = 1260;     % Initial isothermal core temperature [K]
 IN.Tm_ocn = 273;      % Melting temp of ocean [K] 
 
 % NOTE: You always want at least 3 full elements between the surface and

@@ -20,11 +20,17 @@ switch IN.body
         BOD.eps     = 0.9;     % Emissivity
         BOD.ob      = 3;       % obliquity [deg]
         BOD.RParent = 7.78e11; % orbital radius of system from sun [m]
-                
+        BOD.tOrb    = 306800;  % orbital period
+        BOD.e0      = 1.5e-5;  % Tidal strain amplitude
+        
     otherwise
         error('Error. %s is not definited in getBodyParameters.m.',IN.body)
         
 end
 
+% Parameters common to all bodies
+% Ice Properties
+BOD.GH2O  = 3e9;    % Elastic modulus of ice (GPa)
+BOD.EaH2O = 59.4e3; % Activation Energy [J mol-1] 
 
 end

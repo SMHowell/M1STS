@@ -8,7 +8,7 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [MISC] = polarPlot(IN,M,OUT,MISC)
+function [MISC] = polarPlotRes(IN,M,OUT,MISC)
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Generate plot if engaged

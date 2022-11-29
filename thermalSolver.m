@@ -8,13 +8,13 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function M = thermalSolver(M,IN,BOD)
+function M = thermalSolver(M,BOD,IN)
 
 % Get tidal heating
-M = getHeating(M);
+M = getHeating(BOD,M,IN);
 
 % Get surface heat flux
-M = getSurfaceHeatFlux(M,IN,BOD);
+M = getSurfaceHeatFlux(M,BOD);
 
 % Initialize temperature change array
 M.dT = zeros(1,M.Nz); % Primary nodes

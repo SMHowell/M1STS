@@ -34,21 +34,12 @@ M.dm_dt = dm/M.dt;
 M.rOcn = ((3/(4*pi))*dv+M.rOcn^3)^(1/3);
 M.iOcnTop = find((M.rOcn - M.r>0)>0,1,'last');
 
-% Set melt fractions
-M.vfm(M.r_s>M.rSil & M.r_s<M.rOcn) = 1;
-M.vfm(M.r_s>M.rOcn | M.r_s<M.rSil) = 0;
-M.vfm(M.iOcnTop) = (4/3)*pi*(M.rOcn^3 - M.r(M.iOcnTop)^3)/M.V_s(M.iOcnTop);
-M.vfm(M.iOcnBot) = (4/3)*pi*(M.r(M.iOcnBot+1)^3-M.rSil^3)/M.V_s(M.iOcnBot);
-
-% Restore correct temperatures now that energy is back in the right place
-M.T(M.r>=M.rSil & M.r<=M.rOcn) = IN.Tm_ocn;
-
 % Locate interfaces
-M.iOcnTop = find((M.vfm>0 & M.r_s >= M.rSil & M.r_s <= M.rOcn),1,'last');  % Ocean top interface element index
-M.iOcnBot = find((M.vfm>0 & M.r_s >= M.rSil & M.r_s <= M.rOcn),1,'first'); % Ocean bottom interface element index
+M.iOcnTop = find((M.rOcn - M.r>0)>0,1,'last'); % Ocean top interface element index
+M.iOcnBot = find((M.rSil - M.r>0)>0,1,'last'); % Ocean bottom interface element index
 
-% Handle collapse/initiation of ocean
-if (M.rOcn <= M.rSil)
+% Distribute melt fraction (needed for thermal properties)
+if (M.rOcn <= M.rSil) && (abs(dE)>0)
     % Fully frozen ocean
     % Energy Accounting
     rho_s = n2sVolumetric(M,M.rho);
@@ -58,11 +49,26 @@ if (M.rOcn <= M.rSil)
     dT = dE/(M.V_s(M.iOcnTop)*rho_s(M.iOcnTop)*Cp_s(M.iOcnTop));
     M.T(M.iOcnTop) = M.T(M.iOcnTop)+dT;
 
-    % Close out frozen reservoir
-    M.vfm(M.iOcnBot-1:M.iOcnTop+1) = 0;
+    % Close out frozen ocean
+    if isempty(M.rResBot) % No melts in the ice
+        M.vfm(M.r>=M.rSil) = 0;
+    else
+        M.vfm(M.r>=M.rSil & M < M.rResBot) = 0;
+    end
     M.iOcnBot = M.iOcnBot;
     M.rOcn    = M.rSil;
+else
+    % Nominal case
+    % Set melt fractions
+    M.vfm(M.r_s>M.rSil & M.r_s<M.rOcn) = 1;
+    M.vfm(M.r_s>M.rOcn | M.r_s<M.rSil) = 0;
+    M.vfm(M.iOcnTop) = (4/3)*pi*(M.rOcn^3 - M.r(M.iOcnTop)^3)/M.V_s(M.iOcnTop);
+    M.vfm(M.iOcnBot) = (4/3)*pi*(M.r(M.iOcnBot+1)^3-M.rSil^3)/M.V_s(M.iOcnBot);    
+    
+    % Restore correct temperatures now that energy is back in the right place
+    M.T(M.r>=M.rSil & M.r<=M.rOcn) = IN.Tm_ocn;
 end
+
 
 %%%%%%%%%%%%%%%%%%
 % Reservoir Melting/Freezing
