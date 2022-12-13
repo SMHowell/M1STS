@@ -57,6 +57,12 @@ IN.CpOcn  = 4184;  % Specific heat capacity [J/kg K]
 IN.L      = 330e3; % Latent heat of fusion [kJ/kg]
 
 %%%%%%%%%%%%%%%%%%
+% Composition
+%%%%%%%%%%%%%%%%%%
+IN.simu   = 2;      % simulation number (see CompData file)
+
+
+%%%%%%%%%%%%%%%%%%
 % Run Model
 %%%%%%%%%%%%%%%%%%
 main;

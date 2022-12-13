@@ -8,6 +8,9 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Read Composition Data
+COMP = getCompData(IN);
+
 % Initialize Body
 BOD = getBodyParameters(IN);
 
@@ -19,6 +22,9 @@ M.phi = zeros(size(M.r));
 
 % Initialize Thermal Structure
 M = initializeThermal(IN,BOD,M);
+
+% Initialize Energy
+COMP = initializeEnergy(IN,COMP,M);
 
 % Initialize Time
 [IN, M] = initializeTime(IN,M);
