@@ -63,27 +63,6 @@ IN.tOut = val*conversion;
 IN.outN = ceil(IN.tMax / IN.tOut)+1; 
 
 
-% Parse emplacement delay
-timeStr = strsplit(IN.tRes);
-val     = str2double(timeStr{1});
-unit    = timeStr{2};
-
-switch unit
-    case 'yr'
-        conversion = IN.yr2s;
-    case 'kyr'
-        conversion = IN.kyr2s;
-    case 'Myr'
-        conversion = IN.Myr2s;
-    case 'Gyr'
-        conversion = IN.Gyr2s;
-    otherwise
-        error('Incorrect timescale selected.');
-end
-IN.tRes = val*conversion;
-
-
-
 end
 
 

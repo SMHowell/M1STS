@@ -2,13 +2,13 @@
 % Multiphase 1-dimensional Satellite Thermal Solver
 % Spherically symmetric solver for the heat diffusion equation, explicit
 % finite difference in time. Tailored for applications to planetary
-% evolution with considerations for phase change, reservoir freezing, and
+% evolution with considerations for phase change, reservoir freezing, and 
 % eruption.
 % Sam Howell, Elodie Lesage, Julia Miller
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [IN, M] = initializeThermal(IN,BOD,M)
+function [M] = getInitialTemperatures(IN,BOD,M)
 
 % First, we must get the surface temperature that matches the steady state
 % conductive thickness prescribed
@@ -19,12 +19,6 @@ Es    = 3.8e26;      % Solar output [W]
 
 % Search array
 Tsearch = linspace(10,100,1000); % Surface temperature range to search [K]
-
-
-%%%%%%%%%%%%%%%%%%%%%%%
-% Radiogenic heat flux
-%%%%%%%%%%%%%%%%%%%%%%%
-qRad = BOD.m * 4.5e-12 / (4 * pi * BOD.R^2); % Radiogenic heat flux [W/m^2]
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -93,20 +87,30 @@ qAnom = qOut-qIn;     % Anomalous heat flux
 %%%%%%%%%%%%%%%%%%%%%%%
 % Find Nominal Surface Temp
 %%%%%%%%%%%%%%%%%%%%%%%
-Tsurf_0_init  = interp1(qAnom,Tsearch,0); % First guess without geologic heatflow [K]
-Tsurf_0       = Tsurf_0_init;              % Initial Surface temperature [K]
-z             = linspace(0,IN.H0_ice,1000); % Depth profile [m]
+Tsurf_0 = interp1(qAnom,Tsearch,0); % First guess without geologic heatflow [K]
+qIce    = 0;
 
-dT_crit = 1e-5; % Convergence criterion for surface temperature [K]
-T_old   = 0;    % Old surface temperature [K]
-while abs(Tsurf_0-T_old) > dT_crit
-    T_z   = Tsurf_0*(IN.Tm_ocn/Tsurf_0).^(z/IN.H0_ice);        % Temperature profile
-    k     = mean(632 ./ T_z + 0.38 - 1.97e-3 .* T_z);          % Mean solid ice conductivity [W/m K]
-    qIce  = (k * (IN.Tm_ocn - Tsurf_0)) * (1/IN.H0_ice + 1/BOD.R); % Heat flux through ice evaluated at the surface [W/m^2]
-    T_old = Tsurf_0;                                           % Store previous result
-    Tsurf_0  = interp1(qAnom-qIce,Tsearch,0);                % New surface temperature guess
-end
-
+% If there is no ice shell at the start, and if no internal temperatures
+% are specified, presume the body starts isothermal at the solar
+% temperature (zero geologic heat flux). If any of these quantities are
+% known, take them into account.
+if ~isempty(IN.T0_irn) 
+    z     = linspace(M.rIrn,M.rSil,1000); % Depth profile [m]
+    H_sil = M.rSil - M.rIrn; % Layer thickness
+    
+    % Set lower temperature in rock
+    Tb = min(IN.T0_irn);
+        
+    dT_crit = 1e-5; % Convergence criterion for surface temperature [K]
+    T_old   = 0;    % Old surface temperature [K]
+    while abs(Tsurf_0-T_old) > dT_crit
+        T_z   = Tsurf_0*(Tb/Tsurf_0).^(z/H_sil);             % Temperature profile
+        k     = mean(632 ./ T_z + 0.38 - 1.97e-3 .* T_z);    % Mean solid ice conductivity [W/m K]
+        qIce  = (k * (Tb - Tsurf_0)) * (1/H_sil + 1/BOD.R);  % Heat flux through ice evaluated at the surface [W/m^2]
+        T_old = Tsurf_0;                                     % Store previous result
+        Tsurf_0  = interp1(qAnom-qIce,Tsearch,0);            % New surface temperature guess
+    end  
+end 
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Store Results
@@ -114,19 +118,18 @@ end
 M.Tsurf_0 = Tsurf_0;   % Initial surface temperature [K]
 M.Tsurf   = M.Tsurf_0; % Surface temperature [K]
 
-M.QIce_0  = qIce*4*pi*BOD.R^2; % Initial required heat flow to balance T (will be applied to base of shell) [W]
 M.qSol    = qSol; % Solar insolation heat flux
-M.qRad    = qRad; % Radiogenic heat flux
 M.qLoss   = qIce; % Heat flux from interior through ice shell [W/m^2]
 
 
-%%%%%%%%%%%%%%%%%%%%%%%
-% Now, thermal structure can be created
-%%%%%%%%%%%%%%%%%%%%%%%
-M.T = zeros(1,M.Nz);
+M.T  = zeros(1,M.Nz);
+M.dT = zeros(1,M.Nz); % Initialize temperature change array
 
 % Enforce space BCs
 M.T(end) = M.Tsurf_0;
+
+% Set M.T to surface temperature if selected
+if isempty(IN.T0_irn); IN.T0_irn = M.Tsurf_0; end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -137,7 +140,7 @@ kT = 1;         % 0 -> constant k, 1 -> k ~ 1/T
 r1 = M.rOcn;    % Inner radius
 r2 = BOD.R;     % Outer radius
 
-T1 = IN.Tm_ocn; % Inner temeprature
+T1 = min(IN.Tm_ocn,IN.T0_irn); % Inner temeprature
 T2 = M.Tsurf;   % Outer temperature
 
 t_ind  = find(M.r>=r1 & M.r<=r2); % Temporary indexing
@@ -176,7 +179,7 @@ r1 = M.rIrn;    % Inner radius
 r2 = M.rSil;    % Outer radius
 
 T1 = IN.T0_irn; % Inner temeprature
-T2 = IN.Tm_ocn; % Outer temperature
+T2 = min(IN.Tm_ocn,IN.T0_irn); % Outer temperature
 
 t_ind  = find(M.r>=r1 & M.r<=r2); % Temporary indexing
 r_temp = M.r(t_ind);
@@ -192,7 +195,6 @@ else
 end
 
 M.T(t_ind) = T;
-
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % IRON
@@ -223,71 +225,11 @@ M.T(1)     = M.T(2); % dT/dr -> 0 at r = 0
 M.T_init   = M.T;
 
 
-%%%%%%%%%%%%%%%%%%%%%%%
-% Initialize melts
-%%%%%%%%%%%%%%%%%%%%%%%
-% Melt fractions for continuous layers (e.g. reservoirs, ocean, outer core)
-% *volume* fraction (on elements)
-M.vfm   = zeros(1,M.Nz-1);         
-M.vfm(M.r>=M.rSil & M.r< M.rOcn) = 1; % Impose ocean
-M.dm_dt = 0;  % Change in melt mass vs time
-
-% Partial melt fractions
-% *volume* fraction (on elements)
-M.vfm   = zeros(1,M.Nz-1);         
-M.vfm(M.r>=M.rSil & M.r< M.rOcn) = 1; % Impose ocean
-M.dm_dt = 0;  % Change in melt mass vs time
-
-%%%%%%%%%%%%%%%%%%%%%%%
-% Initialize reservoir/ocean parameters
-%%%%%%%%%%%%%%%%%%%%%%%
-M.fV     = 0; % Frozen volume fraction of reservoir
-M.resEmp = 0; % Flag for empalcement of reservoir
-
-% Track element containing interface
-M.iOcnTop = find((M.rOcn - M.r>0)>0,1,'last');   % Ocean top interface element index
-M.iOcnBot = find((M.rSil - M.r>0)>0,1,'last')+1; % Ocean bottom interface element indexd
-
-M.iResTop = []; % Reservoir top interface element index
-M.rResTop = []; % Reservoir top interface radius
-
-M.iResBot = []; % Reservoir bottom interface element index
-M.rResBot = []; % Reservoir bottom interface radius
-
-M.rRes = []; % Reservoir radius
-M.vRes = []; % Reservoir volume
-M.mRes = []; % Reservoir mass
 
 
-%%%%%%%%%%%%%%%%%%%%%%%
-% Get Thermal Properties
-%%%%%%%%%%%%%%%%%%%%%%%
-M.k   = zeros(1,M.Nz);
-M.rho = zeros(1,M.Nz);
-M.Cp  = zeros(1,M.Nz);
-
-[M] = getPressure(M,BOD);
-[M] = getThermalProperties(M,BOD);
-
-
-%%%%%%%%%%%%%%%%%%%%%%%
-% Nusselt Number on Elements
-%%%%%%%%%%%%%%%%%%%%%%%
-M.Ra_cr = 0; % Critical Rayleigh Number
-M.Nu    = ones(1,M.Nz-1);
 
 
 end
-
-
-
-
-
-
-
-
-
-
 
 
 

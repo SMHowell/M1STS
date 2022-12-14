@@ -12,7 +12,7 @@
 BOD = getBodyParameters(IN);
 
 % Initialize Grid
-M = initializeGrid(IN,BOD);
+[M, IN] = initializeGrid(IN,BOD);
 
 % Initialize porosity
 M.phi = zeros(size(M.r));

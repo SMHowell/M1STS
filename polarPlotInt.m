@@ -19,7 +19,7 @@ if IN.pltOn
     %%%%%%%%%%%%%%%%%%%%%%%
     % Initialize plot, axes, movie frames
     %%%%%%%%%%%%%%%%%%%%%%%
-    if M.step==1
+    if M.step==0
         figNum = 10;
         
         % Set up for movie if checked

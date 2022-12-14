@@ -22,12 +22,13 @@ Z       = BOD.GH2O*M.dt./(BOD.GH2O*M.dt+etaDiff); % Elasticity correction
 M.etaVE = Z.*etaDiff;
 
 % Consider the role of *partial* melt!
-[vpfm] = s2nVolumetric(M,M.vpfm); % Melt fraction on the nodes 
 iceInd = (M.iOcnTop+2:M.Nz-1);    % Indices contained entirely w/in the ice shell
-etaIce = M.etaVE(iceInd).*exp(-BOD.aMelt*vpfm(iceInd));
+[vpfm] = s2nVolumetric(M,M.vpfm); % Melt fraction on the nodes 
+vpfm   = vpfm(iceInd);
+etaIce = M.etaVE(iceInd).*exp(-BOD.aMelt*vpfm);
 
 % Einstein Roscoe relationship above BOD.vfmCr
-etaRE = BOD.etaOcn_0.*(1.35*vpfm(iceInd)-0.35).^(-5/2);
+etaIce(vpfm>=BOD.vfmCr) = BOD.etaOcn_0.*(1.35*vpfm(vpfm>BOD.vfmCr)-0.35).^(-5/2);
 
 % Composite
 M.etaVE(iceInd) = etaIce;

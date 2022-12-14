@@ -13,6 +13,11 @@ function [IN,M] = initializeTime(IN,M)
 % Book keeping on inputs
 IN = parseTime(IN);
 
+% Book keep timing
+M.simuTime_old = 0; % Simulation time
+M.realTime_old = 0; % Elapsed time
+tic; 
+
 % Initialize time array and timestep
 M.t       = 0; % Time [s]
 M.step    = 0; % Timestep

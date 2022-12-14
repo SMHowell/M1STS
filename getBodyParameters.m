@@ -31,6 +31,9 @@ switch IN.body
         
 end
 
+% Derivitive parameters
+BOD.V       = (4/3)*pi*BOD.R^3; % Body volume [m^3]
+BOD.rhoBulk = BOD.m/BOD.V;      % Bulk density [kg/m^3] 
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Parameters and Materials common to all bodies
@@ -50,6 +53,7 @@ BOD.etaOcn_0   = 1e-3;   % Viscosity of melt water [Pa s]
 BOD.rhoOcn     = 1000;   % Density [kg/m^3]
 BOD.CpOcn      = 4184;   % Specific heat capacity [J/kg K]
 BOD.rhoIce_0   = 917;    % Ice reference density [kg/m^3]
+BOD.CpIce_0    = 2107;   % Specific heat capacity [J/kg K]
 BOD.Tice_0     = 273;    % Reference temeprature for laws [K]
  
 % Rock: https://www.sciencedirect.com/science/article/pii/S0031920113000289

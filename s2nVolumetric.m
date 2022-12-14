@@ -17,7 +17,7 @@ prop_n  = zeros(1,M.Nz);
 prop_n(refIndT) = prop(refIndT-1).*M.fV1_s + prop(refIndT).*M.fV2_s;
 
 % Set first and last values
-prop_n(1)   = prop_n(2);
-prop_n(end) = prop_n(end-1);   
+prop_n(1)   = prop(1);
+prop_n(end) = prop(end);   
 
 end

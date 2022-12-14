@@ -16,12 +16,6 @@ OUT.dm_dt = zeros(1,IN.NOut); % Freezing rate [kg/s]
 OUT.Tsurf = zeros(1,IN.NOut); % Surface Temperature
 OUT.Dice  = zeros(1,IN.NOut); % Ice thickness
 
-OUT.vRes  = zeros(1,IN.NOut); % Reservoir volume
-OUT.rRes  = zeros(1,IN.NOut); % Reservoir radius
-OUT.zRes  = zeros(1,IN.NOut); % Reservoir Depth
-OUT.fV    = zeros(1,IN.NOut); % Reservoir frozen fraction
-OUT.Tmelt = zeros(1,IN.NOut); % Reservoir melting temperature
-
 MISC      = []; % Miscellaneous array collector
 
 end

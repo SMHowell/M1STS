@@ -19,13 +19,19 @@ initialize;
 % Main Time Loop
 %%%%%%%%%%%%%%%%%%
 while M.t < IN.tMax
+      
+    % Generate Output
+    [IN, OUT, MISC] = outputManager(M,IN,BOD,OUT,MISC);
     
     % Get timestep
     M.dt = getTimestep(M);
-        
+    
     % Temperature diffusion solve
     M = thermalSolver(M,BOD,IN);
-        
+    
+    % Differentiation
+    M = differentiate(M,IN,BOD);
+    
     % Move interfaces
     M = meltingFreezing(M,IN,BOD);
     
@@ -33,17 +39,10 @@ while M.t < IN.tMax
     M.t    = M.t + M.dt;
     M.step = M.step + 1;
     
-    % Determine whether to emplace reservoir
-    M = reservoirEmplacement(M,IN);
-    
     % Update thermal properties
-    M = getThermalProperties(M,BOD);
-    
-    % Check for convection
-    [M] = getConvection(M);
-    
-    % Generate Output
-    [IN, OUT, MISC] = outputManager(M,IN,BOD,OUT,MISC);
+    M = getThermalProperties(M,BOD,IN);
 
+    % Check for convection
+    M = getConvection(M);
        
 end
