@@ -21,10 +21,7 @@ M = initializeGrid(IN,BOD);
 M.phi = zeros(size(M.r));
 
 % Initialize Thermal Structure
-M = initializeThermal(IN,BOD,M);
-
-% Initialize Energy
-COMP = initializeEnergy(IN,COMP,M);
+M = initializeThermal(IN,BOD,COMP,M);
 
 % Initialize Time
 [IN, M] = initializeTime(IN,M);

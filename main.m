@@ -34,7 +34,7 @@ while M.t < IN.tMax
     M.step = M.step + 1;
     
     % Determine whether to emplace reservoir
-    M = reservoirEmplacement(M,IN);
+    M = reservoirEmplacement(M,IN,COMP);
     
     % Update thermal properties
     M = getThermalProperties(M);

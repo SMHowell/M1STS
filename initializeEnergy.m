@@ -8,10 +8,13 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function COMP = initializeEnergy(IN,COMP,M)
+function [COMP, M] = initializeEnergy(IN,COMP,M)
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculate the energy loss from liquid at 
 % each temperature step and how it's spent
+% from composition data file
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 i = IN.simu;
 nrows = length(COMP.temps{i});
@@ -59,4 +62,27 @@ DeltaE              = cumsum(dE);
 COMP.DeltaE{i}      = DeltaE;
 COMP.fE_rmn{i}      = (E_init+DeltaE)/E_init;       % fraction of energy remaining
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Now initialize energy we'll calculate 
+% using thermal solver
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+M.DeltaE = [];
+M.E_init = M.rhoRes*M.vRes*(M.CpRes*M.Tm_res+IN.L);
+
+
+
+
+
+
 end
+
+
+
+
+
+
+
+
+
+

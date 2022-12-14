@@ -130,8 +130,9 @@ M.CpOcn  = IN.CpOcn;  % Specific heat capacity in ocean
 
 M.fV     = 0;         % Frozen volume fraction of reservoir 
 M.resEmp = 0;         % Flag for empalcement of reservoir
-M.Tm_res = M.Tm_ocn;  % Melt temperature in reservoir
-M.rhoRes = M.rhoOcn;  % Density in reservoir
+M.Tm_res = M.Tm_ocn; % Melt temperature in reservoir
+M.rhoRes = IN.rhoOcn; % Density in reservoir
+M.rhoRes = COMP.rho_l{IN.simu}(1); % Density in reservoir from composition data
 M.CpRes  = IN.CpOcn;  % Specific heat capacity in reservoir
 
 % Track interface(s)
