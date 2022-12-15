@@ -311,25 +311,25 @@ CpIrn_m  = MAT.IRN.m.Cp0  * ones(1,M.Nz);
 
 % Save arryas
 M.mat.rhoFull(M.mat.iH2Osolid,:) = rhoH2O_s;
-M.mat.rhoFull(M.mat.iH2Omelts,:) = rhoH2O_m;
+M.mat.rhoFull(M.mat.iH2Omelt,:) = rhoH2O_m;
 M.mat.rhoFull(M.mat.iSilSolid,:) = rhoSil_s;
-M.mat.rhoFull(M.mat.iSilMelts,:) = rhoSil_m;
+M.mat.rhoFull(M.mat.iSilMelt,:) = rhoSil_m;
 M.mat.rhoFull(M.mat.iIrnSolid,:) = rhoIrn_s;
-M.mat.rhoFull(M.mat.iIrnMelts,:) = rhoIrn_m;
+M.mat.rhoFull(M.mat.iIrnMelt,:) = rhoIrn_m;
 
 kFull(M.mat.iH2Osolid,:) = kH2O_s;
-kFull(M.mat.iH2Omelts,:) = kH2O_s;
+kFull(M.mat.iH2Omelt,:) = kH2O_s;
 kFull(M.mat.iSilSolid,:) = kSil_s;
-kFull(M.mat.iSilMelts,:) = kSil_s;
+kFull(M.mat.iSilMelt,:) = kSil_s;
 kFull(M.mat.iIrnSolid,:) = kIrn_s;
-kFull(M.mat.iIrnMelts,:) = kIrn_s;
+kFull(M.mat.iIrnMelt,:) = kIrn_s;
 
 CpFull(M.mat.iH2Osolid,:) = CpH2O_s;
-CpFull(M.mat.iH2Omelts,:) = CpH2O_m;
+CpFull(M.mat.iH2Omelt,:) = CpH2O_m;
 CpFull(M.mat.iSilSolid,:) = CpSil_s;
-CpFull(M.mat.iSilMelts,:) = CpSil_m;
+CpFull(M.mat.iSilMelt,:) = CpSil_m;
 CpFull(M.mat.iIrnSolid,:) = CpIrn_s;
-CpFull(M.mat.iIrnMelts,:) = CpIrn_m;
+CpFull(M.mat.iIrnMelt,:) = CpIrn_m;
 
 
 % Update density

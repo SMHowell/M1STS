@@ -8,7 +8,7 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [U,rOcn_new] = getOceanRadius(M,BOD,IN,dE)
+function [U,rOcn_new] = getOceanRadius(M,BOD,IN,dE,MAT)
 
 %%%%%%%%%%%%%%%%%%
 % Ice Thermal Properties

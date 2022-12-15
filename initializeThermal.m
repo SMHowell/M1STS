@@ -32,7 +32,7 @@ M.fmDiff_H2O = zeros(1,M.Nz-1);
 M.fmDiff_irn = ones(1,M.Nz-1);
 
 % Leeched mass fraction (defined on elements!)
-M.fmK = zeros(1,M.Nz-1);
+M.mat.fK = zeros(1,M.Nz-1);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -41,29 +41,35 @@ M.fmK = zeros(1,M.Nz-1);
 % Track mass fractions of materials on elements
 % [water, water melt, rock, rock melt, iron, iron melt]
 M.mat.fm_s = zeros(6,M.Nz-1);
-M.mat.iH2Osolid = 1; M.mat.iH2Omelts = 2;
-M.mat.iSilSolid = 3; M.mat.iSilMelts = 4;
-M.mat.iIrnSolid = 5; M.mat.iIrnMelts = 6;
+M.mat.iH2Osolid = 1; M.mat.iH2Omelt = 2;
+M.mat.iSilSolid = 3; M.mat.iSilMelt = 4;
+M.mat.iIrnSolid = 5; M.mat.iIrnMelt = 6;
 
 M.mat.fm_s(M.mat.iH2Osolid,:) = IN.fm0_H2O;
 M.mat.fm_s(M.mat.iSilSolid,:) = IN.fm0_sil;
 M.mat.fm_s(M.mat.iIrnSolid,:) = IN.fm0_irn;
+
+% Bookeep space as ice -- makes advection simpler. This doesn't affect the
+% solution because of the special heat balance consideration at the
+% surface.
+M.mat.fm_s(:,end) = 0;
+M.mat.fm_s(1,end) = 1;
 
 % Track volume fractions on elements
 % [water, water melt, rock, rock melt, iron, iron melt]
 % Need to initialize rho on nodes. Track for each
 M.mat.rhoFull = zeros(6,M.Nz);
 M.mat.rhoFull(M.mat.iH2Osolid,:) = MAT.H2O.s.rho0;
-M.mat.rhoFull(M.mat.iH2Omelts,:) = MAT.H2O.m.rho0;
+M.mat.rhoFull(M.mat.iH2Omelt,:) = MAT.H2O.m.rho0;
 M.mat.rhoFull(M.mat.iSilSolid,:) = MAT.SIL.s.rho0;
-M.mat.rhoFull(M.mat.iSilMelts,:) = MAT.SIL.m.rho0;
+M.mat.rhoFull(M.mat.iSilMelt,:) = MAT.SIL.m.rho0;
 M.mat.rhoFull(M.mat.iIrnSolid,:) = MAT.IRN.s.rho0;
-M.mat.rhoFull(M.mat.iIrnMelts,:) = MAT.IRN.m.rho0;
+M.mat.rhoFull(M.mat.iIrnMelt,:) = MAT.IRN.m.rho0;
 rhoFull_s = n2sVolumetric(M,M.mat.rhoFull);
 
 % Bulk density
 M.rho_s = sum(M.mat.fm_s./rhoFull_s).^-1;
-M.rho   = s2nVolumetric(M,M.rho_s);
+M.rho  = s2nVolumetric(M,M.rho_s);
 
 % Volume fractions
 M.mat.fV_s = M.rho_s .* M.mat.fm_s ./ rhoFull_s; 

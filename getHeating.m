@@ -13,7 +13,6 @@ function [M] = getHeating(BOD,M,IN,MAT)
 %%%%%%%%%%%%%%%%%%
 % Radiogenic
 %%%%%%%%%%%%%%%%%%
-
 % Calculate radiogenic heating, after Hussman et al. (2010) and references
 % therein. BC and LYR contain model properties, M contains time,
 % IN.primComp refers to the primordial composition, and fmK is a value between 0 and
@@ -47,7 +46,7 @@ if IN.radOn
     t     = M.t/IN.Gyr2s;    % Time of interest [Gyr]
     
     % Leeching fraction
-    fK_n  = s2nMass(M,M.fmK); % Mass fraction leeched on nodes
+    fK_n  = s2nMass(M,M.mat.fK); % Mass fraction leeched on nodes
     
     % Specific power [W/kg]
     % For actual rocky interior
@@ -59,7 +58,7 @@ if IN.radOn
     % only allow radiogenic elements in silicates (and the ocean), but they
     % are scaled to the full body mass.
     fm_n = s2nMass(M,M.mat.fm_s);
-    mSil = (M.V .* M.rho) .* (fm_n(M.mat.iSilSolid,:)+fm_n(M.mat.iSilMelts,:));
+    mSil = (M.V .* M.rho) .* (fm_n(M.mat.iSilSolid,:)+fm_n(M.mat.iSilMelt,:));
     mSil(end) = 0; % No radiogenic heating in space!
     mSilEff   = BOD.m * (mSil/sum(mSil));
     

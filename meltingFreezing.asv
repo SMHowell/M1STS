@@ -8,7 +8,7 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [M] = meltingFreezing(M,IN,BOD,MAT)
+function [M] = meltingFreezing(M,IN,BOD)
 
 %%%%%%%%%%%%%%%%%%
 % Ocean Melting/Freezing
@@ -122,7 +122,7 @@ if M.vH2O > 0
     %%%%%%%
     if abs(dE)>0 % On
         % Get interface location and energy density of phase change, U [J/m^3]
-        [U,rOcn_new] = getOceanRadius(M,BOD,IN,dE,MAT);
+        [U,rOcn_new] = getOceanRadius(M,BOD,IN,dE);
         
         % Get new ocean volume
         vOcn_new = (4/3)*pi*(rOcn_new^3 - M.rSil^3);
@@ -144,23 +144,6 @@ if M.vH2O > 0
         vfm(M.r_s>M.rOcn | M.r_s<M.rSil) = 0;
         vfm(M.iOcnTop) = (4/3)*pi*(M.rOcn^3 - M.r(M.iOcnTop)^3)/M.V_s(M.iOcnTop);
         vfm(M.iOcnBot) = min((4/3)*pi*(M.rOcn^3 - M.rSil^3)/M.V_s(M.iOcnBot),1);
-        dvfm =  M.mat.fm_s(M.mat.iH2Omelt,:)-vfm;
-        
-        M.mat.fm_s(M.mat.iH2Omelt,:)  = M.mat.fm_s(M.mat.iH2Omelt,:)  + dvfm;
-        M.mat.fm_s(M.mat.iH2Osolid,:) = M.mat.fm_s(M.mat.iH2Osolid,:) - dvfm;
-        
-        rhoFull_s = n2sVolumetric(M,M.mat.rhoFull);
-        drho_s  = sum(M.mat.fm_s./rhoFull_s).^-1-M.rho_s;
-        drho    = s2nVolumetric(M,drho_s);
-        M.rho   = M.rho+drho;
-        M.rho_s = M.rho_s+drho_s;
-        M.mat.fV_s = (M.rho_s .* M.mat.fm_s ./ rhoFull_s); 
-        
-        % Make sure nothing got weird 
-        M.mat.fm_s(M.mat.fm_s<0) = 0;
-        M.mat.fm_s(M.mat.fV_s<0) = 0;
-        M.mat.fm_s(M.mat.fm_s>1) = 1;
-        M.mat.fm_s(M.mat.fV_s>1) = 1;
         
         % Check to see if ocean has frozen out completely
         if M.rOcn<M.rSil

@@ -24,7 +24,7 @@ M.etaVE = Z.*etaDiff;
 
 % Consider the role of *partial* melt!
 iceInd   = (M.iOcnTop+2:M.Nz-1);    % Indices contained entirely w/in the ice shell
-fVmelt_n = s2nVolumetric(M,M.mat.fV_s(M.mat.iH2Omelts,:));
+fVmelt_n = s2nVolumetric(M,M.mat.fV_s(M.mat.iH2Omelt,:));
 etaIce   = M.etaVE(iceInd).*exp(-aMelt*fVmelt_n(iceInd));
 
 % Einstein Roscoe relationship above BOD.vfmCr

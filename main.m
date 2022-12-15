@@ -27,13 +27,13 @@ while M.t < IN.tMax
     M.dt = getTimestep(M);
     
     % Temperature diffusion solve
-    M = thermalSolver(M,BOD,IN);
+    M = thermalSolver(M,BOD,IN,MAT);
     
     % Differentiation
-    M = differentiate(M,IN,BOD);
+    M = differentiate(M,IN,BOD,MAT);
     
     % Move interfaces
-    M = meltingFreezing(M,IN,BOD);
+    M = meltingFreezing(M,IN,BOD,MAT);
     
     % Update time 
     M.t    = M.t + M.dt;

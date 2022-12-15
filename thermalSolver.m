@@ -8,7 +8,7 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function M = thermalSolver(M,BOD,IN)
+function M = thermalSolver(M,BOD,IN,MAT)
 
 % Get tidal heating
 M = getHeating(BOD,M,IN,MAT);
@@ -41,7 +41,7 @@ q_B = - M.Nu(refIndT)   .* k_B .* (M.T(refIndT+1)-M.T(refIndT)) ./ (M.dr(refIndT
 Q_A = r_A.^2 .* q_A;
 Q_B = r_B.^2 .* q_B;
 
-% Apply heat flow boundary conditions
+% Apply heat flow boundary and conditions
 Q_B(end) = M.qLoss * BOD.R^2;
 
 % Temperature change
