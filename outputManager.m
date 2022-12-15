@@ -42,7 +42,7 @@ if IN.outInd * IN.tOut <= M.t
     
     %%%%%%%%%%%%%%%%%%
     % Time Since Last Output
-    %%%%%%%%%%%%%%%%%%    
+    %%%%%%%%%%%%%%%%%%
     dt_simu = M.t - M.simuTime_old;
     dt_real = toc - M.realTime_old;
     
@@ -59,7 +59,7 @@ if IN.outInd * IN.tOut <= M.t
     else
         outRate  = dt_dt/IN.Gyr2s;
         rateUnit = 'Gyr/s';
-    end    
+    end
     
     M.simuTime_old = M.t;
     M.realTime_old = toc;
@@ -81,17 +81,11 @@ if IN.outInd * IN.tOut <= M.t
     %%%%%%%%%%%%%%%%%%
     MISC.outTime = outTime;
     MISC.unit = timeUnit;
-
+    
     [MISC] = polarPlotInt(IN,M,OUT,MISC);
     
     if (IN.outInd == IN.NOut)
-        if IN.resOn
-            outputName = ['H0' num2str(IN.H0_ice/1e3,'%0.1f') '_rRes' num2str(IN.rRes/1e3,'%0.1f') '_zRes' num2str(IN.zResTop/1e3,'%0.1f')];
-            save(['Output/' outputName '.mat'],'OUT');
-        else
-            outputName = ['H0' num2str(IN.H0_ice/1e3,'%0.1f') '_resOff'];
-            save(['Output/' outputName '.mat'],'OUT');
-        end
+        save(['Output/' IN.outputName '.mat'],'OUT');
     end
     
 end

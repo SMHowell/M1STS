@@ -8,15 +8,23 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [M] = getPressure(M,BOD)
+function [M] = getPressure(M,BOD,MAT)
 
- % Guestimate -- *** REPLACE THIS ***
-rhoOcn   = 1000;  % Density [kg/m^3]
-rho0_sil = 3275;  % Reference Density [kg/m^3]
+% Guestimate -- *** REPLACE THIS ***
+P_1 = (BOD.R-M.rSil)  * MAT.H2O.m.rho0 * BOD.g;
+P_2 = P_1 + (M.rSil-M.rIrn) * MAT.SIL.s.rho0 * BOD.g;
+P_3 = P_2 + M.rIrn * MAT.IRN.s.rho0 * BOD.g;
 
-P_min = (BOD.R-M.rSil)  * rhoOcn * BOD.g;
-P_max = (M.rSil-M.rIrn) * rho0_sil * BOD.g;
-M.P   = linspace(P_min,P_max,M.Nz);
+indH2O = find(M.r<=BOD.R  & M.r>M.rSil);
+indSil = find(M.r<=M.rSil & M.r>M.rIrn);
+indIrn = find(M.r<=M.rIrn);
+
+P = zeros(1,M.Nz);
+P(indH2O) = linspace(P_1,  0,numel(indH2O)); 
+P(indSil) = linspace(P_2,P_1,numel(indSil)); 
+P(indIrn) = linspace(P_3,P_2,numel(indIrn)); 
+
+M.P = P;
 
 end
 

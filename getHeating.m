@@ -8,7 +8,7 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [M] = getHeating(BOD,M,IN)
+function [M] = getHeating(BOD,M,IN,MAT)
 
 %%%%%%%%%%%%%%%%%%
 % Radiogenic
@@ -47,30 +47,35 @@ if IN.radOn
     t     = M.t/IN.Gyr2s;    % Time of interest [Gyr]
     
     % Leeching fraction
-    fmK_n = s2nMass(M,M.fmK); % Mass fraction leeched on nodes
-    
-    % Initial configuration for referencing
-    fm0_sil = (1-(IN.fm0_H2O+IN.fm0_irn));
+    fK_n  = s2nMass(M,M.fmK); % Mass fraction leeched on nodes
     
     % Specific power [W/kg]
     % For actual rocky interior
-    PpRad_sil_1 = sum(Piso(1:3) .* fmIso(1:3) .* fm(1:3) .* exp(log(0.5)*(t-tPres)./tHalf(1:3)));
-    PpRad_sil_2 = PpRad_sil_1 + (1-fmK_n) .* Piso(4) .* fmIso(4) .* fm(4) .* exp(log(0.5)*(t-tPres)./tHalf(4)); 
-    PpRad_sil   = PpRad_sil_2 .* M.fm_sil./fm0_sil;    
+    PpRad_sil = sum(Piso(1:3) .* fmIso(1:3) .* fm(1:3) .* exp(log(0.5)*(t-tPres)./tHalf(1:3)));
+    PpRad_sil = PpRad_sil + (1-fK_n) .* Piso(4) .* fmIso(4) .* fm(4) .* exp(log(0.5)*(t-tPres)./tHalf(4));    
+        
+    % Mass fraction of silicates in each layer compared to full body.
+    % Remember that silicates represent a larger effective mass, since we
+    % only allow radiogenic elements in silicates (and the ocean), but they
+    % are scaled to the full body mass.
+    fm_n = s2nMass(M,M.mat.fm_s);
+    mSil = (M.V .* M.rho) .* (fm_n(M.mat.iSilSolid,:)+fm_n(M.mat.iSilMelts,:));
+    mSil(end) = 0; % No radiogenic heating in space!
+    mSilEff   = BOD.m * (mSil/sum(mSil));
     
     % Power [W] generated in each mantle layer
-    m_sil     = M.fm_sil .* M.rho .* M.V;     % Mass of silicates in layer
-    Prad_sil  = PpRad_sil .* m_sil / fm0_sil; % Radiogenic power 
+    Prad_sil  = PpRad_sil .* mSilEff; % Radiogenic power 
     
     % Volumetric heat production [W/m^3]
     Hrad_sil  = Prad_sil./M.V; 
     
     % Ocean Heating ** NOTE! This is applied in getReservoirEnergy, not the
-    % thermal solver **
-    PpRad_ocn  = fmK_n .* Piso(4) .* fmIso(4) .* fm(4) .* exp(log(0.5)*(t-tPres)./tHalf(4)); % Heating rate [W/kg]
-    PpRad_ocn  = PpRad_ocn .* M.fm_sil./fm0_sil;
-    Prad_ocn   = PpRad_ocn .* m_sil / fm0_sil; % Radiogenic power 
-    M.Prad_ocn = sum(Prad_ocn);  % Thermal power generation in the ocean from potassium
+    % thermal solver ** We are calculating the radiogenic heat that should
+    % be in the silicates.
+    PpRad_ocn  = fK_n .* Piso(4) .* fmIso(4) .* fm(4) .* exp(log(0.5)*(t-tPres)./tHalf(4)); % Heating rate [W/kg]
+    
+    Prad_ocn   = PpRad_ocn .* mSilEff; % Radiogenic power 
+    M.Prad_ocn = sum(Prad_ocn); % Thermal power generation in the ocean from potassium
     
 else
     M.Prad_ocn = 0;
@@ -81,11 +86,11 @@ end
 % Tidal Heating
 %%%%%%%%%%%%%%%%%%
 if IN.tidalOn
-    [M] = getIceRheology(M,BOD); % Get ice rheology
+    [M] = getIceRheology(M,BOD,MAT); % Get ice rheology
     
     % Get tidal heating rate on elements
     omega      = (2*pi)/BOD.tOrb; % Orbital forcing frequency
-    Htidal_ice = (BOD.e0^2 * omega^2 * M.etaVE) ./ (1 + (omega^2 * M.etaVE.^2)/BOD.GH2O^2);
+    Htidal_ice = (BOD.e0^2 * omega^2 * M.etaVE) ./ (1 + (omega^2 * M.etaVE.^2)/MAT.H2O.s.Gmod^2);
     
     % Set up array on elements
     H_s        = zeros(1,M.Nz-1);

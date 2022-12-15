@@ -60,7 +60,7 @@ end
 IN.tOut = val*conversion;
 
 % Get number of output timesteps
-IN.outN = ceil(IN.tMax / IN.tOut)+1; 
+IN.outN = ceil(IN.tMax / IN.tOut); 
 
 
 end

@@ -24,7 +24,7 @@ M.step    = 0; % Timestep
 IN.outInd = 0; % Index for output to console
 
 % Number of outputs
-IN.NOut = ceil(IN.tMax/IN.tOut)+1;
+IN.NOut = ceil(IN.tMax/IN.tOut);
 
 end
 

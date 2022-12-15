@@ -11,7 +11,7 @@
 function M = thermalSolver(M,BOD,IN)
 
 % Get tidal heating
-M = getHeating(BOD,M,IN);
+M = getHeating(BOD,M,IN,MAT);
 
 % Get surface heat flux
 M = getSurfaceHeatFlux(M,BOD);

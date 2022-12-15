@@ -40,7 +40,7 @@ while M.t < IN.tMax
     M.step = M.step + 1;
     
     % Update thermal properties
-    M = getThermalProperties(M,BOD,IN);
+    M = getThermalProperties(M,IN,MAT);
 
     % Check for convection
     M = getConvection(M);

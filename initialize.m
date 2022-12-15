@@ -11,6 +11,9 @@
 % Initialize Body
 BOD = getBodyParameters(IN);
 
+% Initialize Materials
+[MAT,IN] = getMaterials(BOD,IN);
+
 % Initialize Grid
 [M, IN] = initializeGrid(IN,BOD);
 
@@ -18,7 +21,7 @@ BOD = getBodyParameters(IN);
 M.phi = zeros(size(M.r));
 
 % Initialize Thermal Structure
-[IN, M] = initializeThermal(IN,BOD,M);
+[IN, M] = initializeThermal(IN,BOD,M,MAT);
 
 % Initialize Time
 [IN, M] = initializeTime(IN,M);

@@ -28,7 +28,7 @@ M.qEmis = BOD.eps * sigma * Tsurf.^4;
 %%%%%%%%%%%%%%%%%%%%%%%
 % Calculate latent heat of sublimation
 % Polynomial curve fits to Table 2.1. R. R. Rogers; M. K. Yau (1989).
-% BOD.A Short Course in Cloud Physics (3rd ed.). Pergamon Press. p. 16.
+% BOD.BoloA Short Course in Cloud Physics (3rd ed.). Pergamon Press. p. 16.
 % ISBN 0-7506-3215-1.
 L = (2834.1 - 0.29*Tsurf - 0.004*Tsurf.^2)*1e3;
 

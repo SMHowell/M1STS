@@ -12,6 +12,6 @@
 % staggered elements
 function [prop_s] = n2sVolumetric(M,prop)
 
-prop_s = M.fV1 .* prop(M.ind) + M.fV2 .* prop(M.ind+1);
+prop_s = M.fV1 .* prop(:,M.ind) + M.fV2 .* prop(:,M.ind+1);
 
 end

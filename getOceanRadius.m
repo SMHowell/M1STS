@@ -30,10 +30,10 @@ Cp_ice =  1e3 * (7.73e-3 * T .* (1 - exp(-1.263e-3 * T.^2)) .* ... % Specific he
 
 % Thermal Expansivity [1/K]
 a0        = 1.704e-4; % Ref thermal expansivity [1/K]
-alpha_ice = a0 * T / BOD.Tice_0; % Thermal expansivity [1/K]
+alpha_ice = a0 * T / MAT.H2O.s.T0; % Thermal expansivity [1/K]
 
 % Density
-rho_ice   = (1-phi).*BOD.rhoIce_0.*(1-(T-BOD.Tice_0).*alpha_ice);  % Density [kg/m^3]
+rho_ice   = (1-phi).*MAT.H2O.s.rho0.*(1-(T-MAT.H2O.s.T0).*alpha_ice);  % Density [kg/m^3]
 
 
 %%%%%%%%%%%%%%%%%%
@@ -43,7 +43,7 @@ rho_ice   = (1-phi).*BOD.rhoIce_0.*(1-(T-BOD.Tice_0).*alpha_ice);  % Density [kg
 U_T = rho_ice(1) * Cp_ice(1) * T(1) - rho_ice(2) * Cp_ice(2) * T(2);
 
 % Latent heat energy density
-U_m = BOD.rhoOcn*BOD.LH2O;
+U_m = MAT.H2O.m.rho0*MAT.H2O.L;
 
 % Total
 U = U_T + U_m;

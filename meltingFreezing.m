@@ -128,7 +128,7 @@ if M.vH2O > 0
         vOcn_new = (4/3)*pi*(rOcn_new^3 - M.rSil^3);
         
         % Total change in melt mass
-        dm = (vOcn_new - M.vOcn)*BOD.rhoOcn;
+        dm = (vOcn_new - M.vOcn)*MAT.H2O.m.rho0;
         
         % Melting Rate
         M.dm_dt = dm/M.dt;

@@ -31,7 +31,7 @@ dE  = 2*pi.*M.rho(ind).*M.Cp(ind).*M.r(ind).^2.*...
 
 % Total energy required to melt water present
 % Get mass fractions of differentiated material on nodes
-dE_max = M.fm_sil(ind).* (1 - fmDiff_H2O(ind)).* IN.fm0_H2O.*M.V(ind).*M.rho(ind)*BOD.LH2O;
+dE_max = M.fm_sil(ind).* (1 - fmDiff_H2O(ind)).* IN.fm0_H2O.*M.V(ind).*M.rho(ind)*MAT.H2O.L;
 
 %%%%%%%
 % Calculate mass change
@@ -40,7 +40,7 @@ dExcess = dE-dE_max;
 dExcess(dExcess<0) = 0;
 
 % Melted mass of water on node
-dm = min(dE,dE_max)./BOD.LH2O;
+dm = min(dE,dE_max)./MAT.H2O.L;
 
 if any(abs(dm)>0)
     % Because we withdrew the extra energy, make sure to set
@@ -56,11 +56,11 @@ if any(abs(dm)>0)
     % Account for mass loss
     %%%%%%%
     % Change in rock volume on node
-    dV   = -dm./BOD.rhoIce_0;
+    dV   = -dm./MAT.H2O.s.rho0;
     dV_n = zeros(1,M.Nz); dV_n(ind) = dV;
     
     % Change in liquid water volume
-    dV_n(M.iOcnTop) = -sum(dV_n); %.*BOD.rhoIce_0/BOD.rhoOcn;
+    dV_n(M.iOcnTop) = -sum(dV_n); %.*MAT.H2O.s.rho0/MAT.H2O.m.rho0;
     
     % Propogate change
     rTemp  = M.r;
@@ -82,7 +82,7 @@ if any(abs(dm)>0)
     %%%%%%%
     % Volume and mass changes
     dV_s = n2sVolumetric(M,dV_n);
-    dm_s = -dV_s*BOD.rhoIce_0;
+    dm_s = -dV_s*MAT.H2O.s.rho0;
     dm_s(dm_s<0) = 0;
     
     % Update boundaries
@@ -124,8 +124,8 @@ if any(abs(dm)>0)
     T1  = M.T(ind); rho1 = M.rho(ind); Cp1 = M.Cp(ind); V1 = M.V(ind);
     E1  = T1*rho1*Cp1*V1;
     
-    T2  = IN.Tm_ocn; rho2 = BOD.rhoIce_0; Cp2 = BOD.CpIce_0; V2 = sum(-dV);
-    E2  = T2*rho2*Cp2*V2+sum(dm)*BOD.LH2O;
+    T2  = IN.Tm_ocn; rho2 = MAT.H2O.s.rho0; Cp2 = MAT.H2O.s.Cp0; V2 = sum(-dV);
+    E2  = T2*rho2*Cp2*V2+sum(dm)*MAT.H2O.L;
     
     M.T(ind) = (E1+E2)/((rho1*Cp1*V1+rho2*Cp2*V2));
     
@@ -159,7 +159,7 @@ if any(abs(dm)>0)
     M.fmDiff_H2O(2:end-1) = interp1(rTemp_s,M.fmDiff_H2O,M.r_s(2:end-1));
     
     % Leech K
-    M.fmK = IN.fm0_k .* M.fmDiff_H2O;
+    M.fmK = IN.fK0 .* M.fmDiff_H2O;
     
 end
 end

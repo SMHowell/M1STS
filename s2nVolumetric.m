@@ -13,11 +13,13 @@
 function [prop_n] = s2nVolumetric(M,prop)
 
 refIndT = 2:M.Nz -1;     % indices of solution
-prop_n  = zeros(1,M.Nz); 
-prop_n(refIndT) = prop(refIndT-1).*M.fV1_s + prop(refIndT).*M.fV2_s;
+
+prop_n  = zeros(size(prop,1),M.Nz); 
+prop_n(:,refIndT) = prop(:,refIndT-1).*M.fV1_s + prop(:,refIndT).*M.fV2_s;
 
 % Set first and last values
-prop_n(1)   = prop(1);
-prop_n(end) = prop(end);   
-
+prop_n(:,1)   = prop(:,1);
+prop_n(:,end) = prop(:,end);   
+    
+    
 end

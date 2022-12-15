@@ -12,11 +12,10 @@
 % normal nodes
 function [prop_n] = s2nMass(M,prop)
 
-rho_s   = n2sVolumetric(M,M.rho); % Staggered density
-refIndT = 2:M.Nz -1;              % indices of solution
-prop_n  = zeros(1,M.Nz); 
-prop_n(refIndT) = (prop(1:end-1).*M.V_s(1:end-1).*rho_s(1:end-1) + prop(2:end).*M.V_s(2:end).*rho_s(2:end))./ ...
-                  (M.V_s(1:end-1).*rho_s(1:end-1)+M.V_s(2:end).*rho_s(2:end));
+refIndT = 2:M.Nz -1;  % indices of solution
+prop_n  = zeros(size(prop,1),M.Nz); 
+prop_n(:,refIndT) = (prop(:,1:end-1).*M.V_s(1:end-1).*M.rho_s(1:end-1) + prop(:,2:end).*M.V_s(2:end).*M.rho_s(2:end))./ ...
+                  (M.V_s(1:end-1).*M.rho_s(1:end-1)+M.V_s(2:end).*M.rho_s(2:end));
 
 % Set first and last values
 prop_n(1)   = prop(1);

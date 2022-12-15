@@ -4,31 +4,31 @@
 % Samuel.M.Howell@jpl.nasa.gov
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [M] = getIceRheology(M,BOD)
+function [M] = getIceRheology(M,BOD,MAT)
 
-% Constants
-R = 8.314;  % Ideal gas constant [J mol-1 K-1]
-omega = (2*pi)/BOD.tOrb; % Orbital forcing frequency
+% Inputs for aggregate considerations
+vfmCr      = 0.40;   % Melt fraction required for disaggregation (~0.4 - 0.6):
+                     % https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1029/2002JE001943
+aMelt      = 30;     % Exponent on melt-fraction dependence of viscosity: 
+                     % soest.hawaii.edu/GG/FACULTY/smithkonter/GG631/other/HirthKohlstedt_2000.pdf
 
 % Material Inputs 
-T0   = 273;  % Reference temperature for eta0 [K]
-eta0 = BOD.GH2O/omega; % Reference viscosity at T0 [Pa s]
+MAT.H2O.s.eta0 = MAT.H2O.s.Gmod/BOD.omega; % Reference viscosity at MAT.H2O.s.T0 [Pa s]
 
 % Get creep viscosity
-etaDiff = eta0 * exp((BOD.EaH2O/(R*T0))*(T0./M.T-1));
+etaDiff = MAT.H2O.s.eta0 * exp((MAT.H2O.s.Ea/(MAT.R*MAT.H2O.s.T0))*(MAT.H2O.s.T0./M.T-1));
 
-% Get visco-elastic effective viscosity
-Z       = BOD.GH2O*M.dt./(BOD.GH2O*M.dt+etaDiff); % Elasticity correction
+% Get brittle viscosity limit
+Z       = MAT.H2O.s.Gmod*M.dt./(MAT.H2O.s.Gmod*M.dt+etaDiff); % Elasticity correction
 M.etaVE = Z.*etaDiff;
 
 % Consider the role of *partial* melt!
-iceInd = (M.iOcnTop+2:M.Nz-1);    % Indices contained entirely w/in the ice shell
-[vpfm] = s2nVolumetric(M,M.vpfm); % Melt fraction on the nodes 
-vpfm   = vpfm(iceInd);
-etaIce = M.etaVE(iceInd).*exp(-BOD.aMelt*vpfm);
+iceInd   = (M.iOcnTop+2:M.Nz-1);    % Indices contained entirely w/in the ice shell
+fVmelt_n = s2nVolumetric(M,M.mat.fV_s(M.mat.iH2Omelts,:));
+etaIce   = M.etaVE(iceInd).*exp(-aMelt*fVmelt_n(iceInd));
 
 % Einstein Roscoe relationship above BOD.vfmCr
-etaIce(vpfm>=BOD.vfmCr) = BOD.etaOcn_0.*(1.35*vpfm(vpfm>BOD.vfmCr)-0.35).^(-5/2);
+etaIce(fVmelt_n>=vfmCr) = MAT.H2O.m.eta0.*(1.35*fVmelt_n(fVmelt_n>vfmCr)-0.35).^(-5/2);
 
 % Composite
 M.etaVE(iceInd) = etaIce;

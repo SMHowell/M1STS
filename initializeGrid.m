@@ -14,44 +14,22 @@ function [M,IN] = initializeGrid(IN,BOD)
 %%%%%%%%%%%%%%%%%%%%%%
 M.rOcn = BOD.R;  % Outer radius of ocean surface
 M.rSil = BOD.R;  % Outer radius of seafloor
-M.rIrn = IN.H0_irn; % Outer radius of core
-
-
-%%%%%%%%%%%%%%%%%%%%%%
-% Differentiation-related Geometry
-%%%%%%%%%%%%%%%%%%%%%%
-% Find largest plausible H2O layer to ensure well-resolved
-if isempty(IN.Hmax_H2O)
-    rSil_min    = floor((BOD.R^3 - (3/(4*pi))*(IN.fm0_H2O*BOD.m)/BOD.rhoIce_0)^(1/3));
-    IN.Hmax_H2O = BOD.R - rSil_min;
-else
-    rSil_min   = BOD.R - IN.Hmax_H2O;
-    IN.fm0_H2O = (4/3)*pi*(BOD.R^3-rSil_min^3)*BOD.rhoIce_0/BOD.m; 
-end
-
-% Find largest plausible iron layer to ensure well-resolved
-if isempty(IN.Hmax_irn)
-    rIrn_max    = ((3/(4*pi))*(IN.fm0_irn*BOD.m)/BOD.rhoIrn_0)^(1/3);
-    IN.Hmax_irn = rIrn_max;
-else
-    rIrn_max    = IN.Hmax_irn;
-    IN.fm0_irn  = (4/3)*pi*IN.Hmax_irn^3*BOD.rhoIrn_0/BOD.m; 
-end
+M.rIrn = 0;      % Initial uter radius of core
 
 
 %%%%%%%%%%%%%%%%%%%%%%
 % Model Grid
 %%%%%%%%%%%%%%%%%%%%%%
-r1   = rSil_min; r2 = BOD.R; dz = min(IN.dz_H2O,IN.dz_sil);
+r1   = BOD.R - IN.Hmax_H2O; r2 = BOD.R; dz = min(IN.dz_H2O,IN.dz_sil);
 rH2O = linspace(r1, r2, ceil((r2-r1)/dz));
 
-r1   = rIrn_max; r2 = rSil_min; dz = IN.dz_sil;
+r1   = IN.Hmax_irn; r2 = BOD.R - IN.Hmax_H2O; dz = IN.dz_sil;
 rSil = linspace(r1, r2, ceil((r2-r1)/dz));
 
-r1   = 0; r2 = rIrn_max; dz = min(IN.dz_irn,IN.dz_sil);
+r1   = 0; r2 = IN.Hmax_irn; dz = min(IN.dz_irn,IN.dz_sil);
 rIrn = linspace(r1, r2, ceil((r2-r1)/dz));
 
-% Radial array with space ghost node 1 km off the surface
+% Radial array with space ghost node dz_H2O off the surface
 M.r   = sort(unique([rH2O,rSil,rIrn,BOD.R+IN.dz_H2O]));
 M.dr  = diff(M.r);    % Element height [m]
 M.z   = BOD.R - M.r;  % Depth [m]

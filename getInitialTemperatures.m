@@ -53,7 +53,7 @@ end
 
 Fs0      = Es / (4 * pi * BOD.RParent^2);  % solar insolation at equatiorial high noon [W/m^2]
 Fs       = Fs0 * sqrt((BOD.ob*pi/180)^2 + (coLatEff*pi/180).^2) / (pi * sqrt(2)); % Obliquity and colatitude correction
-qSol     = (1-BOD.A) * Fs;                 % Average annual solar insolation [W/m^2]
+qSol     = (1-BOD.BoloA) * Fs;                 % Average annual solar insolation [W/m^2]
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -61,7 +61,7 @@ qSol     = (1-BOD.A) * Fs;                 % Average annual solar insolation [W/
 %%%%%%%%%%%%%%%%%%%%%%%
 % Calculate latent heat of sublimation
 % Polynomial curve fits to Table 2.1. R. R. Rogers; M. K. Yau (1989).
-% BOD.A Short Course in Cloud Physics (3rd ed.). Pergamon Press. p. 16.
+% BOD.BoloA Short Course in Cloud Physics (3rd ed.). Pergamon Press. p. 16.
 % ISBN 0-7506-3215-1.
 L = (2834.1 - 0.29*Tsearch - 0.004*Tsearch.^2)*1e3;
 
