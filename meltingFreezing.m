@@ -156,12 +156,12 @@ if M.vRes>0
     vResDiff    = M.vRes - vResOld;
     vDiffTop    = vResDiff * M.ratioEtop;       % Volume diff at res top
     vDiffBot    = vResDiff * M.ratioEbot;       % Volume diff at res bottom (not sure these are very clean...)
-    M.mRes      = M.vRes*M.rhoRes;              % New reservoir mass
-    M.rRes      = (3/4*pi*M.vRes)^(1/3);        % Reservoir radius
+    M.mRes      = M.vRes * M.rhoRes;            % New reservoir mass
+    M.rRes      = (3/4/pi*M.vRes)^(1/3);        % Reservoir radius
     M.rResTop   = M.rResTop + sign(vDiffTop)*(abs(vDiffTop)*3/4/pi)^(1/3);  % New top interface                    
     M.rResBot   = M.rResBot + sign(vDiffBot)*(abs(vDiffBot)*3/4/pi)^(1/3);  % New bottom interface
-    M.iResTop = find((M.rResTop - M.r>0)>0,1,'last');   % Reservoir top interface element index
-    M.iResBot = find((M.rResBot - M.r>0)>0,1,'last');   % Reservoir bottom interface element index
+    M.iResTop   = find((M.rResTop - M.r>0)>0,1,'last');   % Reservoir top interface element index
+    M.iResBot   = find((M.rResBot - M.r>0)>0,1,'last');   % Reservoir bottom interface element index
 
     
     if M.rResTop <= M.rResBot 

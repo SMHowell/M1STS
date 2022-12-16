@@ -14,6 +14,10 @@ function [T, rho, vlf, vif] = coolFreeze(M, COMP, IN)
 i_low = find(COMP.fE_rmn{IN.simu} >= M.fE_rmn, 1, 'last');
 i_max = length(COMP.fE_rmn{IN.simu});
 
+% if i_low == 3
+%     disp('hep hep hep!')
+% end
+
 % interpolate values of temperature, volumic frozen fraction and density
 % associated
 if i_low == 1 
