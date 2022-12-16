@@ -51,8 +51,8 @@ IN.tRes    = '100 kyr';  % Time after which to start emplacement
 %%%%%%%%%%%%%%%%%%
 % Thermal Properties
 %%%%%%%%%%%%%%%%%%
-IN.Tm_ocn = 273;   % Melting temp of ocean [K] - NOTE: This should set equal to the initial reservoir melting temperature
-IN.rhoOcn = 1000;  % Density [kg/m^3]
+% IN.Tm_ocn = 273;   % Melting temp of ocean [K] - NOTE: This should set equal to the initial reservoir melting temperature
+% IN.rhoOcn = 1000;  % Density [kg/m^3]
 IN.CpOcn  = 4184;  % Specific heat capacity [J/kg K]
 IN.L      = 330e3; % Latent heat of fusion [kJ/kg]
 
@@ -60,7 +60,6 @@ IN.L      = 330e3; % Latent heat of fusion [kJ/kg]
 % Composition
 %%%%%%%%%%%%%%%%%%
 IN.simu   = 2;      % simulation number (see CompData file)
-
 
 %%%%%%%%%%%%%%%%%%
 % Run Model

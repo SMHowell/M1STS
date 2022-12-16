@@ -183,7 +183,7 @@ if M.vRes>0
         M.rRes  = 0;  % Reservoir radius
         M.vRes  = 0;  % Reservoir volume
         M.fV    = 1;  % Reservoir frozen fraction
-        M.mRes  = 0;  % Reservoir mass
+        M.mRes  = 0; % Reservoir mass
         
     elseif M.rResBot <= M.rOcnTop
         % Ice shell melted to reservoir depth

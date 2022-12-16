@@ -39,6 +39,8 @@ M.Cp =  1e3 * (7.73e-3 * M.T .* (1 - exp(-1.263e-3 * M.T.^2)) .* ... % Specific 
 % Account for melt contribution to Cp, rho, but *NOT* k, which is handled in
 % the thermal solver and convectiveConductivity.m. 
 % Lay out ocean and reservoir thermal properties.
+%%%%%%%%
+
 rhoMelt = zeros(size(M.rho));
 rhoMelt(M.r<=M.rOcnTop) = M.rhoOcn;
 if M.vRes>0; rhoMelt((M.r>= M.rResBot) & (M.r<=M.rResTop)) = M.rhoRes; end

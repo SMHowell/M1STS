@@ -67,8 +67,10 @@ COMP.fE_rmn{i}      = (E_init+DeltaE)/E_init;       % fraction of energy remaini
 % using thermal solver
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-M.DeltaE = [];
-M.E_init = M.rhoRes*M.vRes*(M.CpRes*M.Tm_res+IN.L);
+M.DeltaEtop = 0;
+M.DeltaEbot = 0;
+M.DeltaE    = 0;
+M.E_init    = M.rhoRes*M.vShell*(M.CpRes*M.Tm_res+IN.L); % /!\ energy in the liquid shell, not the spherical res
 
 
 

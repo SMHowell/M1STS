@@ -18,7 +18,7 @@ initialize;
 %%%%%%%%%%%%%%%%%%
 % Main Time Loop
 %%%%%%%%%%%%%%%%%%
-while M.t < IN.tMax
+while M.t < IN.tMax && M.Tm_res > M.Tstop
     
     % Get timestep
     M.dt = getTimestep(M);
@@ -27,14 +27,14 @@ while M.t < IN.tMax
     M = thermalSolver(M,IN,BOD);
         
     % Move interfaces
-    M = meltingFreezing(M,IN);
+    M = meltingFreezing(M,IN,COMP);
     
     % Update time 
     M.t    = M.t + M.dt;
     M.step = M.step + 1;
     
     % Determine whether to emplace reservoir
-    M = reservoirEmplacement(M,IN,COMP);
+    [COMP, M] = reservoirEmplacement(M,IN,COMP);
     
     % Update thermal properties
     M = getThermalProperties(M);

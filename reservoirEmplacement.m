@@ -8,7 +8,7 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function M = reservoirEmplacement(M,IN,COMP)
+function [COMP, M] = reservoirEmplacement(M,IN,COMP)
 
 % Check if its time for reservoir emplacement
 if (M.t>IN.tRes) && (M.resEmp == 0)
@@ -27,6 +27,7 @@ if (M.t>IN.tRes) && (M.resEmp == 0)
     M.iResBot = find((M.rResBot - M.r>0)>0,1,'last'); % Reservoir bottom interface element index
    
     % Set properties
+    M.vShell = 4/3*pi*M.rResTop^3 - 4/3*pi*M.rResBot^3; % volume of the liquid shell
     M.rRes   = (M.rResTop-M.rResBot)/2; % Reservoir radius
     M.vRes   = (4/3)*pi*M.rRes^3; % Reservoir volume
     M.rhoRes = M.rhoOcn;          % Reservoir density
@@ -35,6 +36,7 @@ if (M.t>IN.tRes) && (M.resEmp == 0)
 
     % Initialize energy
     [COMP, M] = initializeEnergy(IN,COMP,M);
+
 end
 
 end

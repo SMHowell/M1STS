@@ -45,9 +45,15 @@ Q_A = r_A.^2 .* q_A;
 Q_B = r_B.^2 .* q_B;
 
 % Energy out of reservoir
-if M.t>IN.tRes
-    dE               = -4*pi*M.dt*(Q_B(M.iResTop)+Q_B(M.iResBot));
-    M.DeltaE         = M.DeltaE + dE;                     % cumulative energy variation
+% if M.t>IN.tRes
+if M.vRes>0 
+    dEtop            = -4*pi*M.dt*(Q_B(M.iResTop));
+    dEbot            = 4*pi*M.dt*(Q_A(M.iResBot));   % not really sure here ......
+    M.DeltaEtop      = M.DeltaEtop + dEtop;          % cumulative energy variation
+    M.DeltaEbot      = M.DeltaEbot + dEbot;
+    M.DeltaE         = M.DeltaEtop + M.DeltaEbot;
+    M.ratioEtop      = dEtop / (dEtop + dEbot); % ratio of energy leaving from top
+    M.ratioEbot      = dEbot / (dEtop + dEbot); % ratio of energy leaving from bottom
     M.fE_rmn         = (M.E_init + M.DeltaE) / M.E_init;
 end
 
@@ -68,7 +74,7 @@ M.T      = M.T + M.dT;
 % Apply boundary conditions to ghost nodes
 M.Tsurf  = M.T(end-1);
 M.T(end) = M.Tsurf; % Zero out dT in space
-M.T(1)   = IN.Tm_ocn;
+M.T(1)   = M.Tm_ocn;
 
 end
 
