@@ -42,5 +42,10 @@ while M.t < IN.tMax && M.Tm_res > M.Tstop
     % Generate Output
     [IN, OUT, MISC] = outputManager(M,IN,BOD,OUT,MISC);
 
+    % Reservoir Viscoelastic Deformation?
+    if M.resEmp == 1
+        checkDeformation(M);
+    end
+
        
 end

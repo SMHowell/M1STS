@@ -12,8 +12,12 @@ function [COMP, M] = reservoirEmplacement(M,IN,COMP)
 
 % Check if its time for reservoir emplacement
 if (M.t>IN.tRes) && (M.resEmp == 0)
+
     % Set flag
     M.resEmp = 1;
+
+    % Save temperature field
+    Tinit = M.T;
     
     % Set temperature and melt fraction
     M.T(  (M.z  <=IN.zResTop+2*IN.rRes) & (M.z  >=IN.zResTop)) = M.Tm_res;
@@ -36,6 +40,13 @@ if (M.t>IN.tRes) && (M.resEmp == 0)
 
     % Initialize energy
     [COMP, M] = initializeEnergy(IN,COMP,M);
+
+    % Calculate Maxwell time far from reservoir
+    IN.E = 1e9;                             % Young modulus
+    iResCenter = M.iResBot + round((M.iResTop-M.iResBot)/2);
+    M.Tfar = Tinit(iResCenter);             % far field temperature
+    M.eta = 1e14*exp(25.2*(273/M.Tfar-1));  % viscosity 
+    M.tMaxwell = M.eta / IN.E + M.t;        % Maxwell time (after res. emplacement)         
 
 end
 

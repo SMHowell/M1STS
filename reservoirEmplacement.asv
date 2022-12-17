@@ -8,12 +8,17 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function M = reservoirEmplacement(M,IN)
+function [COMP, M] = reservoirEmplacement(M,IN,COMP)
 
 % Check if its time for reservoir emplacement
 if (M.t>IN.tRes) && (M.resEmp == 0)
+
     % Set flag
     M.resEmp = 1;
+
+        % Save far field temperature
+    iResCenter = round(M.iResTop - M.iResBot);
+    M.Tfar = M.T(iResCenter);
     
     % Set temperature and melt fraction
     M.T(  (M.z  <=IN.zResTop+2*IN.rRes) & (M.z  >=IN.zResTop)) = M.Tm_res;
@@ -27,6 +32,7 @@ if (M.t>IN.tRes) && (M.resEmp == 0)
     M.iResBot = find((M.rResBot - M.r>0)>0,1,'last'); % Reservoir bottom interface element index
    
     % Set properties
+    M.vShell = 4/3*pi*M.rResTop^3 - 4/3*pi*M.rResBot^3; % volume of the liquid shell
     M.rRes   = (M.rResTop-M.rResBot)/2; % Reservoir radius
     M.vRes   = (4/3)*pi*M.rRes^3; % Reservoir volume
     M.rhoRes = M.rhoOcn;          % Reservoir density
@@ -35,6 +41,12 @@ if (M.t>IN.tRes) && (M.resEmp == 0)
 
     % Initialize energy
     [COMP, M] = initializeEnergy(IN,COMP,M);
+
+    % Calculate Maxwell time far from reservoir
+    IN.E = 1e9;                   % Young modulus
+    M.eta = 1e14*exp(25.2*(273/M.Tfar-1)); % Viscosity 
+    M.tMaxwell = IN.E / M.eta;
+
 end
 
 end
