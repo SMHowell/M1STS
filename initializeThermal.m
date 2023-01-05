@@ -106,22 +106,22 @@ qSub = L .* P .* sqrt(m./(2 * pi * R * TsurfTemp));
 % Required Geologic Heat Flux [W/m^2]
 %%%%%%%%%%%%%%%%%%%%%%%
 qIn   = qSol;          % Paid into heat budget
-qOut  = qEmis + qSub; % Withdrawn from heat budget
-qAnom = qOut-qIn;     % Anomalous heat flux
+qOut  = qEmis + qSub;  % Withdrawn from heat budget
+qAnom = qOut-qIn;      % Anomalous heat flux
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Find Nominal Surface Temp 
 %%%%%%%%%%%%%%%%%%%%%%%
 Tsurf_0_init  = interp1(qAnom,TsurfTemp,0); % First guess without geologic heatflow [K]
-Tsurf_0       = Tsurf_0_init;              % Initial Surface temperature [K]
-z             = linspace(0,IN.H0,1000); % Depth profile [m]
+Tsurf_0       = Tsurf_0_init;               % Initial Surface temperature [K]
+z             = linspace(0,IN.H0,1000);     % Depth profile [m]
 
 dT_crit = 1e-5; % Convergence criterion for surface temperature [K]
 T_old   = 0;    % Old surface temperature [K]
 while abs(Tsurf_0-T_old) > dT_crit
-    T_z   = Tsurf_0*(M.Tm_ocn/Tsurf_0).^(z/IN.H0);            % Temperature profile
+    T_z   = Tsurf_0*(M.Tm_ocn/Tsurf_0).^(z/IN.H0);             % Temperature profile
     k     = mean(632 ./ T_z + 0.38 - 1.97e-3 .* T_z);          % Mean solid ice conductivity [W/m K]
-    qIce  = (k * (M.Tm_ocn - Tsurf_0)) * (1/IN.H0 + 1/BOD.R); % Heat flux through ice evaluated at the surface [W/m^2]
+    qIce  = (k * (M.Tm_ocn - Tsurf_0)) * (1/IN.H0 + 1/BOD.R);  % Heat flux through ice evaluated at the surface [W/m^2]
     T_old = Tsurf_0;                                           % Store previous result
     Tsurf_0  = interp1(qAnom-qIce,TsurfTemp,0);                % New surface temperature guess
 end
@@ -129,13 +129,13 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%
 % Store Results
 %%%%%%%%%%%%%%%%%%%%%%%
-M.Tsurf_0 = Tsurf_0;   % Initial surface temperature [K]
-M.Tsurf   = M.Tsurf_0; % Surface temperature [K]
+M.Tsurf_0 = Tsurf_0;            % Initial surface temperature [K]
+M.Tsurf   = M.Tsurf_0;          % Surface temperature [K]
 
-M.QIce_0  = qIce*4*pi*BOD.R^2; % Initial required heat flow to balance T (will be applied to base of shell) [W]
-M.qSol    = qSol; % Solar insolation heat flux 
-M.qRad    = qRad; % Radiogenic heat flux 
-M.qLoss   = qIce; % Heat flux from interior through ice shell [W/m^2]
+M.QIce_0  = qIce*4*pi*BOD.R^2;  % Initial required heat flow to balance T (will be applied to base of shell) [W]
+M.qSol    = qSol;               % Solar insolation heat flux 
+M.qRad    = qRad;               % Radiogenic heat flux 
+M.qLoss   = qIce;               % Heat flux from interior through ice shell [W/m^2]
 
 
 

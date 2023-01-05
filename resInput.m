@@ -55,6 +55,7 @@ IN.tRes    = '100 kyr';   % Time after which to start emplacement
 % IN.rhoOcn = 1000;  % Density [kg/m^3]
 IN.CpOcn  = 4184;  % Specific heat capacity [J/kg K]
 IN.L      = 330e3; % Latent heat of fusion [kJ/kg]
+IN.X      = 5e-10; % Liquid water compressibility [Pa^-1]
 
 %%%%%%%%%%%%%%%%%%
 % Composition

@@ -34,7 +34,7 @@ while M.t < IN.tMax && M.Tm_res > M.Tstop
     M.step = M.step + 1;
     
     % Determine whether to emplace reservoir
-    [COMP, M] = reservoirEmplacement(M,IN,COMP);
+    [COMP, M] = reservoirEmplacement(BOD,IN,M,COMP);
     
     % Update thermal properties
     M = getThermalProperties(M);
@@ -43,9 +43,11 @@ while M.t < IN.tMax && M.Tm_res > M.Tstop
     [IN, OUT, MISC] = outputManager(M,IN,BOD,OUT,MISC);
 
     % Reservoir Viscoelastic Deformation?
-    if M.resEmp == 1
-        checkDeformation(M);
-    end
+    checkDeformation(M);
+
+    % Eruption?
+    % M = Eruption(COMP,M);
+
 
        
 end

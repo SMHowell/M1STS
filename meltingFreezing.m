@@ -78,6 +78,8 @@ if M.vRes>0
 
     % Grab reservoir properties from composition data
     [T, rho, vlf, vif] = coolFreeze(M, COMP, IN);
+    M.vlf = vlf;    % volumic liquid fraction
+    M.vif = vif;    % volumic ice fraction (after expansion! vif=V_ice/V_init)
 
 %       Everything commented hereafter is not necessary anymore (I think??)
 

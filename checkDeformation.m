@@ -10,8 +10,10 @@
 
 function [] = checkDeformation(M)
 
-if M.t > M.tMaxwell
-    error('Reservoir will not erupt, Maxwell time is exceeded.');
+if M.vRes>0
+    if M.t > M.tMaxwell
+        error('Reservoir will not erupt, Maxwell time is exceeded.');
+    end
 end
 
 end
