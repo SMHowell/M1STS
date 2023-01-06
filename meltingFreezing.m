@@ -75,56 +75,6 @@ M.T(M.r<=M.rOcnTop) = M.Tm_ocn;
 % effectively.
 
 if M.vRes>0  
-    
-    % Calculate heat extracted from reservoir
-    if M.iResTop==M.iResBot
-        % Handle case when reservoir is collapsing
-        dE_resTop = 0.5*(M.T(M.iResTop)-M.Tm_res)*M.rho(M.iResTop)*M.Cp(M.iResTop)*(4/3)*pi*(M.r_s(M.iResTop)^3 - M.r_s(M.iResTop-1)^3);
-        dE_resBot = 0.5*((M.T(M.iResBot+1)-M.Tm_res)*M.rho(M.iResBot+1)*M.Cp(M.iResBot+1)*(4/3)*pi*(M.r_s(M.iResBot+1)^3 - M.r_s(M.iResBot)^3));
-        
-        % check whether the interface has warmed above Tm
-        dE_iceTop = 0.5*(M.T(M.iResTop+1)-M.Tm_res)*M.rho(M.iResTop+1)*M.Cp(M.iResTop+1)*(4/3)*pi*(M.r_s(M.iResTop+1)^3 - M.r_s(M.iResTop)^3);
-        dE_iceTop(dE_iceTop<0) = 0;  % Ice is allowed to be colder than melting
-        if M.T(M.iResTop+1)>M.Tm_res % Ice is not allowed to be warmer
-            M.T(M.iResTop+1) = M.Tm_res;
-        end
-        
-        dE_iceBot = 0.5*(M.T(M.iResBot)-M.Tm_res)*M.rho(M.iResBot)*M.Cp(M.iResBot)*(4/3)*pi*(M.r_s(M.iResBot)^3 - M.r_s(M.iResBot-1)^3);
-        dE_iceBot(dE_iceBot<0) = 0; % Ice is allowed to be colder than melting
-        if M.T(M.iResBot)>M.Tm_res  % Ice is not allowed to be warmer
-            M.T(M.iResBot) = M.Tm_res;
-        end
-        
-    else
-        % Handle nominal case
-        dE_resTop = (M.T(M.iResTop)-M.Tm_res)*M.rho(M.iResTop)*M.Cp(M.iResTop)*(4/3)*pi*(M.r_s(M.iResTop)^3 - M.r_s(M.iResTop-1)^3);
-        dE_resBot = ((M.T(M.iResBot+1)-M.Tm_res)*M.rho(M.iResBot+1)*M.Cp(M.iResBot+1)*(4/3)*pi*(M.r_s(M.iResBot+1)^3 - M.r_s(M.iResBot)^3));
-        
-        % check whether the interface has warmed above Tm
-        dE_iceTop = (M.T(M.iResTop+1)-M.Tm_res)*M.rho(M.iResTop+1)*M.Cp(M.iResTop+1)*(4/3)*pi*(M.r_s(M.iResTop+1)^3 - M.r_s(M.iResTop)^3);
-        dE_iceTop(dE_iceTop<0) = 0;  % Ice is allowed to be colder than melting
-        if M.T(M.iResTop+1)>M.Tm_res % Ice is not allowed to be warmer
-            M.T(M.iResTop+1) = M.Tm_res;
-        end
-        
-        dE_iceBot = (M.T(M.iResBot)-M.Tm_res)*M.rho(M.iResBot)*M.Cp(M.iResBot)*(4/3)*pi*(M.r_s(M.iResBot)^3 - M.r_s(M.iResBot-1)^3);
-        dE_iceBot(dE_iceBot<0) = 0; % Ice is allowed to be colder than melting
-        if M.T(M.iResBot)>M.Tm_res  % Ice is not allowed to be warmer
-            M.T(M.iResBot) = M.Tm_res;
-        end
-    end
-    
-    % Calculate change in melt
-    dEtop = dE_resTop + dE_iceTop;
-    dEbot = dE_resBot + dE_iceBot;
-
-    % Calculate Energy
-    M.DeltaEtop      = M.DeltaEtop + dEtop;          % cumulative energy variation
-    M.DeltaEbot      = M.DeltaEbot + dEbot;
-    M.DeltaE         = M.DeltaEtop + M.DeltaEbot;
-    M.ratioEtop      = dEtop / (dEtop + dEbot); % ratio of energy leaving from top
-    M.ratioEbot      = dEbot / (dEtop + dEbot); % ratio of energy leaving from bottom
-    M.fE_rmn         = (M.E_init + M.DeltaE) / M.E_init;
 
     % Grab reservoir properties from composition data
     [T, rho, vlf, vif] = coolFreeze(M, COMP, IN);
