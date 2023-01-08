@@ -17,14 +17,20 @@ function M = Eruption(IN,COMP,M)
 if M.vRes>0
 
     % freezing-induced overpressure in the reservoir:
-    V_ice           = M.vRes_init * M.vif;       % volume of ice (after expansion)
-    Vl_compressed   = M.vRes_init - V_ice;       % volume of liquid once compressed (after ice expansion)
-    Vl              = M.vRes_init * M.vlf;       % volume of liquid if not pressurized
-    M.deltaP        = -1/IN.X * log(Vl_compressed/Vl);
+
+    % Vl = M.vRes_init * M.vlf;
+    % vlfRef = Vl / M.vRef;
+    % vffRef = 1 - vlfRef;
+
+    M.ViceTot         = M.vRes_init * M.vif;       % volume of ice (after expansion)
+    M.Vice            = M.Vice - M.Vice_old;       % volume of ice since last eruption
+    M.Vl_compressed   = M.vRes_old - Vice;         % volume of liquid once compressed (after ice expansion)
+    M.Vl              = M.vRes_init * M.vlf;       % volume of liquid if not pressurized
+    M.deltaP          = -1/IN.X * log(M.Vl_compressed/M.Vl);
     
     % check if it overcomes threshold overpressure:
     if M.deltaP >= M.DeltaPc
-        M.eruption  = 1;
+        M.eruption  = M.eruption + 1;
         M.V_erupt   = Vl - Vl_compressed;
     
         fprintf('Erupted volume: %f km^3 \n',M.V_erupt*1e-9);
@@ -59,7 +65,13 @@ if M.vRes>0
         fprintf('Input composition   [mol/kg of water]: %f Ca + %f Mg + %f Na + %f K + %f Cl + %f S + %f C + %f Si\n',COMP.Ca{IN.simu}(1), COMP.Mg{IN.simu}(1), COMP.Na{IN.simu}(1), COMP.K{IN.simu}(1), COMP.Cl{IN.simu}(1), COMP.S{IN.simu}(1), COMP.C{IN.simu}(1), COMP.Si{IN.simu}(1));
         fprintf('Erupted composition [mol/kg of water]: %f Ca + %f Mg + %f Na + %f K + %f Cl + %f S + %f C + %f Si\n',M.Ca, M.Mg, M.Na, M.K, M.Cl, M.S, M.C, M.Si);
         
-        error('Eruption!')
+        %error('Eruption!')
+
+        % update remaining liquid volume:
+        M.Vice_old = M.Vice;
+        M.vRes_old = M.Vl_compressed;
+
+
     end
 end
 

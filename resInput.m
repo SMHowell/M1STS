@@ -60,7 +60,7 @@ IN.X      = 5e-10; % Liquid water compressibility [Pa^-1]
 %%%%%%%%%%%%%%%%%%
 % Composition
 %%%%%%%%%%%%%%%%%%
-IN.simu   = 13;      % simulation number (see CompData file)
+IN.simu   = 14;      % simulation number (see CompData file)
 
 %%%%%%%%%%%%%%%%%%
 % Run Model

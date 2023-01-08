@@ -17,7 +17,7 @@ a0    = 1.704e-4; % Ref thermal expansivity [1/K]
 rho0  = 917;      % Ref density @ T0 [kg/m^3]
 
 % Density
-M.alpha = a0 * M.T / T0;                         % Thermal expansivity [1/K]
+M.alpha = a0 * M.T / T0;                           % Thermal expansivity [1/K]
 M.rho   = (1-M.phi).*rho0.*(1-(M.T-T0).*M.alpha);  % Density [kg/m^3]
 
 % Conductivity

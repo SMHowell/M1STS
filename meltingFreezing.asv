@@ -97,8 +97,8 @@ if M.vRes>0
     M.rResBot = (-(3/(4*pi))*vDiffBot+M.rResBot^3)^(1/3);
 
     % Freezing front velocity (average top and bottom)
-    M.freezeRate = ((vResOld*3/4/pi)^(1/3)-(M.vRes*3/4/pi)^(1/3)) / M.dt;
-    
+    M.freezeRate = ((vResOld*3/4/pi)^(1/3)-(M.vRes*3/4/pi)^(1/3)) / M.dt * 100/365.25/24/3600; % in cm/yr
+     
     % Change in reservoir size and frozen fraction
     M.rRes  = (M.rResTop-M.rResBot)/2; % Reservoir radius
     
