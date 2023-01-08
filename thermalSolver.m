@@ -80,26 +80,3 @@ M.T(end) = M.Tsurf; % Zero out dT in space
 M.T(1)   = M.Tm_ocn;
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

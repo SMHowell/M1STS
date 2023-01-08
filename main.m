@@ -46,7 +46,7 @@ while M.t < IN.tMax && M.Tm_res > M.Tstop
     checkDeformation(M);
 
     % Eruption?
-    % M = Eruption(COMP,M);
+    M = Eruption(IN,COMP,M);
 
 
        

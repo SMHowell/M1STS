@@ -45,9 +45,9 @@ M.rResTop = []; % Reservoir top interface radius
 M.iResBot = []; % Reservoir bottom interface element index
 M.rResBot = []; % Reservoir bottom interface radius
 
-M.rRes = []; % Reservoir radius
-M.vRes = []; % Reservoir volume
-M.mRes = []; % Reservoir mass
+M.rRes = 0; % Reservoir radius
+M.vRes = 0; % Reservoir volume
+M.mRes = 0; % Reservoir mass
 
 
 %%%%%%%%%%%%%%%%%%%%%%%

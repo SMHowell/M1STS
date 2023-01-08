@@ -33,8 +33,7 @@ IN.lat  = 0;          % Latitude of simulation (deg)
 %%%%%%%%%%%%%%%%%%
 % Geometry
 %%%%%%%%%%%%%%%%%%
-IN.H0  = 10e3;        % Initial ice shell thickness [m]
-
+IN.H0  = 25e3;        % Initial ice shell thickness [m]
 IN.Nz  = 200;         % Number of nodes in vertical direction
 IN.Nx  = 100;         % Number of nodes in hotizontal direction (not implemented)
 
@@ -44,7 +43,7 @@ IN.Nx  = 100;         % Number of nodes in hotizontal direction (not implemented
 % bodies. It may break when the number of reservoir elements is <= 3.
 % Maybe not.
 IN.rRes    = 2e3;         % Initial reservoir radius [m]
-IN.zResTop = 2e3;         % Initial reservoir top depth [m]
+IN.zResTop = 4e3;         % Initial reservoir top depth [m]
 IN.tRes    = '100 kyr';   % Time after which to start emplacement
 
 
@@ -60,7 +59,7 @@ IN.X      = 5e-10; % Liquid water compressibility [Pa^-1]
 %%%%%%%%%%%%%%%%%%
 % Composition
 %%%%%%%%%%%%%%%%%%
-IN.simu   = 13;      % simulation number (see CompData file)
+IN.simu   = 2;      % simulation number (see CompData file)
 
 %%%%%%%%%%%%%%%%%%
 % Run Model
