@@ -8,7 +8,7 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [M] = meltingFreezing(M,IN,COMP)
+function [M,OUT] = meltingFreezing(M,IN,COMP,OUT)
 
 
 %%%%%%%%%%%%%%%%%%
@@ -78,13 +78,14 @@ if M.vRes>0
 
     % Grab reservoir properties from composition data
     [T, rho, vlf, vif] = coolFreeze(M, COMP, IN);
-
+    
     % Update parameters
     M.vif       = vif;
     M.rhoRes    = rho;
     M.fV        = 1 - vlf;
     M.Tm_res    = T;
-
+    OUT.Tmelt   = T;
+    
     % Change in reservoir size
     vResOld     = M.vRes;
     M.vRes      = (4/3)*pi*IN.rRes^3 * vlf;     % New reservoir volume
@@ -105,5 +106,8 @@ if M.vRes>0
     M.iResTop = find((M.rResTop - M.r>0)>0,1,'last'); % Reservoir top interface element index
     M.iResBot = find((M.rResBot - M.r>0)>0,1,'last'); % Reservoir bottom interface element index
 
+    % Set Temp
+    M.T(M.iResBot:M.iResTop) = M.Tm_res;
+    
 end
 end

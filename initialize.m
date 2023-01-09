@@ -30,4 +30,4 @@ M = initializeThermal(IN,BOD,COMP,M);
 [OUT,MISC] = initializeOutputs(IN,M);
 
 % Stop temperature
-M.Tstop = COMP.temps{IN.simu}(end)
+M.Tstop = COMP.temps{IN.simu}(end);
