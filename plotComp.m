@@ -10,4 +10,4 @@
 
 figure(2)
 
-plot(OUT.t2,OUT.comp);
+plot(OUT.t2,OUT.comp{1});

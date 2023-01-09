@@ -77,22 +77,23 @@ end
 % For composition plots
 %%%%%%%%%%%%%%%%%%
 
-% if IN.outInd * IN.tOut2 < M.t    
-%     IN.outInd = IN.outInd + 1;
-% 
-%     OUT.t2(IN.outInd)     = M.t; 
-% 
-%     % Store composition data
-%     OUT.comp{1,IN.outInd}  =  COMP.Ca;
-%     OUT.comp{2,IN.outInd}  =  COMP.Mg;
-%     OUT.comp{3,IN.outInd}  =  COMP.Na;
-%     OUT.comp{4,IN.outInd}  =  COMP.K;
-%     OUT.comp{5,IN.outInd}  =  COMP.Cl;
-%     OUT.comp{6,IN.outInd}  =  COMP.S;
-%     OUT.comp{7,IN.outInd}  =  COMP.C;
-%     OUT.comp{8,IN.outInd}  =  COMP.Si;
-%     OUT.comp{9,IN.outInd}  =  COMP.Mtg;
-% end
+if M.vRes>0
+    if IN.outInd2 * IN.tOut2 < M.t    
+        IN.outInd2 = IN.outInd2 + 1;
+    
+        OUT.t2(IN.outInd2)     = M.t; 
+
+        % Store composition data
+        OUT.comp{1,IN.outInd2}  =  M.Ca;
+        OUT.comp{2,IN.outInd2}  =  M.Mg;
+        OUT.comp{3,IN.outInd2}  =  M.Na;
+        OUT.comp{4,IN.outInd2}  =  M.K;
+        OUT.comp{5,IN.outInd2}  =  M.Cl;
+        OUT.comp{6,IN.outInd2}  =  M.S;
+        OUT.comp{7,IN.outInd2}  =  M.C;
+        OUT.comp{8,IN.outInd2}  =  M.Si;
+    end
+end
 
 end
 
