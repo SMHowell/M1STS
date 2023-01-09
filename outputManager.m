@@ -80,18 +80,18 @@ end
 if M.vRes>0
     if IN.outInd2 * IN.tOut2 < M.t    
         IN.outInd2 = IN.outInd2 + 1;
-    
+        
         OUT.t2(IN.outInd2)     = M.t; 
 
         % Store composition data
-        OUT.comp{1,IN.outInd2}  =  M.compCa;
-        OUT.comp{2,IN.outInd2}  =  M.compMg;
-        OUT.comp{3,IN.outInd2}  =  M.compNa;
-        OUT.comp{4,IN.outInd2}  =  M.compK;
-        OUT.comp{5,IN.outInd2}  =  M.compCl;
-        OUT.comp{6,IN.outInd2}  =  M.compS;
-        OUT.comp{7,IN.outInd2}  =  M.compC;
-        OUT.comp{8,IN.outInd2}  =  M.compSi;
+        OUT.comp(1,IN.outInd2)  =  M.compCa;
+        OUT.comp(2,IN.outInd2)  =  M.compMg;
+        OUT.comp(3,IN.outInd2)  =  M.compNa;
+        OUT.comp(4,IN.outInd2)  =  M.compK;
+        OUT.comp(5,IN.outInd2)  =  M.compCl;
+        OUT.comp(6,IN.outInd2)  =  M.compS;
+        OUT.comp(7,IN.outInd2)  =  M.compC;
+        OUT.comp(8,IN.outInd2)  =  M.compSi;
     end
 end
 

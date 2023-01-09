@@ -25,8 +25,8 @@ OUT.Tmelt = zeros(1,IN.NOut); % Reservoir melting temperature
 
 MISC      = []; % Miscellaneous array collector
 
-OUT.comp = cell(8,IN.NOut);
+OUT.comp = zeros(IN.Ncomp,IN.NOut2);
 
-OUT.eruptTimes = zeros(IN.nErupt);
+OUT.eruptTimes = zeros(IN.nErupt,1);
 
 end

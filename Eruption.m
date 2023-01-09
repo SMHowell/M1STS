@@ -12,9 +12,9 @@
 % NOT FUNCTIONNAL YET
 
 
-function M = Eruption(IN,COMP,M)
+function [M, OUT] = Eruption(IN,COMP,M,OUT)
 
-if M.vRes>0
+if M.vRes>0 && M.canErupt
 
     % freezing-induced overpressure in the reservoir:
 
@@ -45,6 +45,7 @@ if M.vRes>0
     end
 
     % Erupted composition:
+    M.compLabels = {'Ca','Mg','Na','K','Cl','S','C','Si'};
     M.compCa  = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.Ca{IN.simu}(indexInterp),M.fE_rmn,'spline');
     M.compMg  = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.Mg{IN.simu}(indexInterp),M.fE_rmn,'spline');
     M.compNa  = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.Na{IN.simu}(indexInterp),M.fE_rmn,'spline');

@@ -46,14 +46,14 @@ IN.Nx  = 100;         % Number of nodes in hotizontal direction (not implemented
 % Maybe not.
 IN.rRes    = 2e3;         % Initial reservoir radius [m]
 IN.zResTop = 2e3;         % Initial reservoir top depth [m]
-IN.tRes    = '100 kyr';   % Time after which to start emplacement
+IN.tRes    = '10 kyr';   % Time after which to start emplacement
 
 
 %%%%%%%%%%%%%%%%%%
 % Thermal Properties
 %%%%%%%%%%%%%%%%%%
-% IN.Tm_ocn = 273;   % Melting temp of ocean [K] - NOTE: This should set equal to the initial reservoir melting temperature
-% IN.rhoOcn = 1000;  % Density [kg/m^3]
+% IN.Tm_ocn = 273;   % Melting temp of ocean [K] - NOTE: This should set 
+% equal to the initial reservoir melting temperature 
 IN.CpOcn  = 4184;  % Specific heat capacity [J/kg K]
 IN.L      = 330e3; % Latent heat of fusion [kJ/kg]
 IN.X      = 5e-10; % Liquid water compressibility [Pa^-1]
@@ -62,6 +62,10 @@ IN.X      = 5e-10; % Liquid water compressibility [Pa^-1]
 % Composition
 %%%%%%%%%%%%%%%%%%
 IN.simu   = 14;      % simulation number (see CompData file)
+IN.Ncomp  = 8;       % Number of species tracked
+
+% Number of eruptions
+IN.nErupt = 1e3;
 
 %%%%%%%%%%%%%%%%%%
 % Run Model

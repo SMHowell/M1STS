@@ -105,5 +105,8 @@ if M.vRes>0
     M.iResTop = find((M.rResTop - M.r>0)>0,1,'last'); % Reservoir top interface element index
     M.iResBot = find((M.rResBot - M.r>0)>0,1,'last'); % Reservoir bottom interface element index
 
+    % Set Temp
+    M.T(M.iResBot:M.iResTop) = M.Tm_res;
+    
 end
 end

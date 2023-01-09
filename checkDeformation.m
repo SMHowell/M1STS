@@ -8,12 +8,12 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [] = checkDeformation(M)
+function M = checkDeformation(M)
 
 if M.vRes>0
     if M.t > M.tMaxwell
         fprintf('Maxwell time: %f yr', M.tMaxwell/365.25/24/3600);
-        error('Reservoir will not erupt, Maxwell time is exceeded.');
+        M.canErupt = 0;
     end
 end
 
