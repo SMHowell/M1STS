@@ -62,7 +62,7 @@ if M.vRes>0
         fprintf('Erupted volume: %f km^3 \n',M.V_erupt*1e-9);
         fprintf('Freezing time : %f yr \n',(M.t-IN.tRes)/365.25/24/3600);
         fprintf('Input composition   [mol/kg of water]: %f Ca + %f Mg + %f Na + %f K + %f Cl + %f S + %f C + %f Si\n',COMP.Ca{IN.simu}(1), COMP.Mg{IN.simu}(1), COMP.Na{IN.simu}(1), COMP.K{IN.simu}(1), COMP.Cl{IN.simu}(1), COMP.S{IN.simu}(1), COMP.C{IN.simu}(1), COMP.Si{IN.simu}(1));
-        fprintf('Erupted composition [mol/kg of water]: %f Ca + %f Mg + %f Na + %f K + %f Cl + %f S + %f C + %f Si\n',M.Ca, M.Mg, M.Na, M.K, M.Cl, M.S, M.C, M.Si);
+        fprintf('Erupted composition [mol/kg of water]: %f Ca + %f Mg + %f Na + %f K + %f Cl + %f S + %f C + %f Si\n',M.compCa, M.compMg, M.compNa, M.compK, M.compCl, M.compS, M.compC, M.compSi);
 
         if M.eruption > IN.nErupt
             error('Too many eruptions')
