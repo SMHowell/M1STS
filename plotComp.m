@@ -70,7 +70,7 @@ plot(xPlot(2:end),yPlot(2:end))
 box on; grid on; 
 xlim([0,OUT.t2(lastIndTime)/IN.kyr2s])
 xlabel('Time [kyr]')
-ylabel('Ice Shell Thickness [km]')
+ylabel('Local Ice Shell Thickness [km]')
 set(gca,'fontsize',24);
 
 
