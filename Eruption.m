@@ -16,17 +16,12 @@ function M = Eruption(IN,COMP,M)
 
 if M.vRes>0
 
-    % freezing-induced overpressure in the reservoir:
-
-    % Vl = M.vRes_init * M.vlf;
-    % vlfRef = Vl / M.vRef;
-    % vffRef = 1 - vlfRef;
-
-    M.ViceTot         = M.vRes_init * M.vif;       % volume of ice (after expansion)
-    M.Vice            = M.ViceTot - M.Vice_old;    % volume of ice since last eruption
-    M.Vl_compressed   = M.vRes_old - M.Vice;         % volume of liquid once compressed (after ice expansion)
-    M.Vl              = M.vRes_old - M.vRes_init*(1-M.vlf);       % volume of liquid if not pressurized
-    M.deltaP          = -1/IN.X * log(M.Vl_compressed/M.Vl);
+    % freezing-induced overpressure in the reservoir    
+    M.ViceTot         = M.vRes_init * M.vif;                    % total volume of ice (after expansion)
+    M.Vice            = M.ViceTot - M.Vice_old;                 % volume of ice since last eruption
+    M.Vl_compressed   = M.vRes_old - M.Vice;                    % volume of liquid once compressed (after ice expansion)
+    M.Vl              = M.vRes_old - M.vRes_init*(1-M.vlf);     % volume of liquid if not pressurized
+    M.deltaP          = -1/IN.X * log(M.Vl_compressed/M.Vl);    % overpressure
     
     % find index of closest remaining energy fraction from composition data
     i_low = find(COMP.fE_rmn{IN.simu} >= M.fE_rmn, 1, 'last');
