@@ -34,10 +34,10 @@ while M.t < IN.tMax && M.Tm_res > M.Tstop
     M.step = M.step + 1;
 
     % Reservoir Viscoelastic Deformation?
-    checkDeformation(M);
+    M = checkDeformation(M);
 
     % Eruption?
-    M = Eruption(IN,COMP,M);
+    [M, OUT] = Eruption(IN,COMP,M,OUT);
     
     % Update thermal properties
     M = getThermalProperties(M);

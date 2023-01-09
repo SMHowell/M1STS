@@ -23,9 +23,6 @@ IN.outInd2 = 0; % Index for composition output to console
 IN.NOut  = ceil(IN.tMax/IN.tOut)+1;
 IN.NOut2 = ceil(IN.tMax/IN.tOut2)+1;
 
-% Number of eruptions
-IN.nErupt = 50;
-
 end
 
 

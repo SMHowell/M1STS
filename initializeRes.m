@@ -14,5 +14,4 @@ function [M] = initializeRes(IN,M)
 disp('Reminder to implement initializeRes.m');
 
 
-
 end

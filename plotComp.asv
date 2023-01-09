@@ -21,12 +21,11 @@ for i=1:IN.Ncomp
 end
 legend(M.compLabels,'location','eastoutside');
 
-for i=1:25:M.eruption-1
+for i=1:25:M.eruption
     plot([OUT.eruptTimes(i)/IN.kyr2s,OUT.eruptTimes(i)/IN.kyr2s],[0,1],'r');
 end
 
 axis tight; box on; grid on; 
-xlim([0,OUT.t2(lastIndTime)/IN.kyr2s])
 xlabel('Time [kyr]')
 ylabel('Concentration [mol/kg H_2O]')
 set(gca,'fontsize',24);
@@ -37,8 +36,6 @@ figure(3); clf; set(gcf,'color','w');
 
 plot(OUT.eruptTimes(1:M.eruption-2)/IN.kyr2s,diff(OUT.eruptTimes(1:M.eruption-1)/IN.yr2s))
 
-axis tight; box on; grid on; 
-xlim([0,OUT.t2(lastIndTime)/IN.kyr2s])
 xlabel('Time [kyr]')
-ylabel('Eruption Interval [yr]')
+ylabel('Eruption interval [yr]')
 set(gca,'fontsize',24);
