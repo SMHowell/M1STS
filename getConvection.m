@@ -8,7 +8,7 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [M] = getConvection(M)
+function [M] = getConvection(M,MAT)
 
 % **** NOTE: REPLACE *****
 
@@ -21,6 +21,11 @@ M.Ra_cr = 0;
 % Nusselt Number on Elements
 %%%%%%%%%%%%%%%%%%%%%%%
 M.Nu = ones(1,M.Nz-1);
+
+if M.t> 1.5*3.15e16 % x Gyr
+    fV_n = s2nVolumetric(M,M.mat.fV_s);
+    M.Nu = 5 * fV_n(M.mat.iSilSolid,:);
+end
 
 end
 

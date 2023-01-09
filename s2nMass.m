@@ -18,7 +18,7 @@ prop_n(:,refIndT) = (prop(:,1:end-1).*M.V_s(1:end-1).*M.rho_s(1:end-1) + prop(:,
                   (M.V_s(1:end-1).*M.rho_s(1:end-1)+M.V_s(2:end).*M.rho_s(2:end));
 
 % Set first and last values
-prop_n(1)   = prop(1);
-prop_n(end) = prop(end);   
+prop_n(:,1)   = prop(:,1);
+prop_n(:,end) = prop(:,end);   
 
 end

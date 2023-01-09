@@ -46,7 +46,7 @@ if IN.radOn
     t     = M.t/IN.Gyr2s;    % Time of interest [Gyr]
     
     % Leeching fraction
-    fK_n  = s2nMass(M,M.mat.fK); % Mass fraction leeched on nodes
+    fK_n  = M.mat.fmH2O_diff * IN.fK0; % Mass fraction leeched on nodes (mass fraction of whater that has differentiated)
     
     % Specific power [W/kg]
     % For actual rocky interior

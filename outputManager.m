@@ -21,6 +21,7 @@ if IN.outInd * IN.tOut <= M.t
     OUT.dm_dt(IN.outInd) = M.dm_dt ;
     OUT.Tsurf(IN.outInd) = M.Tsurf;  % Surface Temperature
     OUT.Dice(IN.outInd)  = BOD.R-M.rOcn; % Ice thickness
+    OUT.DH2O(IN.outInd)  = BOD.R-M.rSil; % Ice thickness
     
     %%%%%%%%%%%%%%%%%%
     % Display Time
@@ -70,7 +71,7 @@ if IN.outInd * IN.tOut <= M.t
     str{1} = [num2str(outTime,'%05.1f') ' ' timeUnit ' Elapsed'];
     str{end+1} = [' @ ' num2str(outRate,'%05.1f') ' ' rateUnit '.'];
     str{end+1} = [' Ice Shell ' num2str(OUT.Dice(IN.outInd)/1e3,'%03.1f') ' km.' ];
-    str{end+1} = [' diffMax ' num2str(max(M.fmDiff_H2O),'%01.2f') '.'];
+    str{end+1} = [' H2O Layer ' num2str(OUT.DH2O(IN.outInd)/1e3,'%03.1f') ' km.' ];
     % str{end+1} = [' T_surf = ' num2str(M.Tsurf,'%05.1f.')];
     str{end+1} = [' ' num2str(100*IN.outInd/IN.NOut,'%04.1f') '% Complete.'];
     disp([str{:}]);

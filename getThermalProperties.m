@@ -349,7 +349,9 @@ M.Cp  = sum(CpFull.*fm_n);
 % Diffusivity
 M.K = M.k./(M.rho .* M.Cp);
 
-
+if any(isnan(M.k))
+    imBroken
+end
 
 end
 

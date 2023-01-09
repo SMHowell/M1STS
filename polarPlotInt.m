@@ -132,26 +132,32 @@ if IN.pltOn
     %%% Boundaries
     hold on; alpha = 0.35;
     
+    % Colors
+    cIce = [     0         1         1];
+    cOcn = [0.5843    0.8157    0.9882];
+    cSil = [0.7961    0.3765    0.0824];
+    cIrn = [     1         1         1];
+    
     % Ice
-    color = 'cyan';
+    color = cIce;
     r1 = M.r(end-1)/1e3; r2 = M.rOcn/1e3;     
     fill([0,Tmax,Tmax,0,0], [r2,r2,r1,r1,r2],color,'facealpha',alpha)
     fill([0,Tmax,Tmax,0,0],-[r2,r2,r1,r1,r2],color,'facealpha',alpha)
     
     % Ocean
-    color = [0.5843    0.8157    0.9882];
+    color = cOcn;
     r1 = M.rOcn/1e3; r2 = M.rSil/1e3;     
     fill([0,Tmax,Tmax,0,0], [r2,r2,r1,r1,r2],color,'facealpha',alpha)
     fill([0,Tmax,Tmax,0,0],-[r2,r2,r1,r1,r2],color,'facealpha',alpha) 
     
     % Mantle
-    color = [0.7961    0.3765    0.0824];
+    color = cSil;
     r1 = M.rSil/1e3; r2 = M.rIrn/1e3;     
     fill([0,Tmax,Tmax,0,0], [r2,r2,r1,r1,r2],color,'facealpha',alpha)
     fill([0,Tmax,Tmax,0,0],-[r2,r2,r1,r1,r2],color,'facealpha',alpha) 
     
     % Core
-    color = 'white';
+    color = cIrn;
     r1 = M.rIrn/1e3; r2 = -r1;     
     fill([0,Tmax,Tmax,0,0], [r2,r2,r1,r1,r2],color,'facealpha',alpha)
     

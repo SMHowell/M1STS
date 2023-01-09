@@ -42,7 +42,7 @@ Q_A = r_A.^2 .* q_A;
 Q_B = r_B.^2 .* q_B;
 
 % Apply heat flow boundary and conditions
-Q_B(end) = M.qLoss * BOD.R^2;
+Q_B(end) = M.qLoss * r_B(end)^2;
 
 % Temperature change
 M.dT(refIndT) = A .* (Q_B - Q_A) + (M.dt./(M.rho(refIndT) .* M.Cp(refIndT))) .* M.H(refIndT);
@@ -54,6 +54,10 @@ M.T      = M.T + M.dT;
 M.Tsurf  = M.T(end-1); % Track new surface temperature
 M.T(end) = M.Tsurf;    % Zero out dT in space
 M.T(1)   = M.T(2);     % dT/dr = 0 at r = 0
+
+if any(isnan(M.T))
+    imBroken
+end
 
 end
 

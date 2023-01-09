@@ -27,8 +27,8 @@ iceInd   = (M.iOcnTop+2:M.Nz-1);    % Indices contained entirely w/in the ice sh
 fVmelt_n = s2nVolumetric(M,M.mat.fV_s(M.mat.iH2Omelt,:));
 etaIce   = M.etaVE(iceInd).*exp(-aMelt*fVmelt_n(iceInd));
 
-% Einstein Roscoe relationship above BOD.vfmCr
-etaIce(fVmelt_n>=vfmCr) = MAT.H2O.m.eta0.*(1.35*fVmelt_n(fVmelt_n>vfmCr)-0.35).^(-5/2);
+% % Einstein Roscoe relationship above BOD.vfmCr
+% etaIce(fVmelt_n>=vfmCr) = MAT.H2O.m.eta0.*(1.35*fVmelt_n(fVmelt_n>vfmCr)-0.35).^(-5/2);
 
 % Composite
 M.etaVE(iceInd) = etaIce;

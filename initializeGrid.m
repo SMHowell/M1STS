@@ -14,16 +14,17 @@ function [M,IN] = initializeGrid(IN,BOD)
 %%%%%%%%%%%%%%%%%%%%%%
 M.rOcn = BOD.R;  % Outer radius of ocean surface
 M.rSil = BOD.R;  % Outer radius of seafloor
-M.rIrn = 0;      % Initial uter radius of core
+M.rIrn = 0;      % Initial outer radius of core
+M.rIoc = 0;      % Initial outer radius of outer core
 
 
 %%%%%%%%%%%%%%%%%%%%%%
 % Model Grid
 %%%%%%%%%%%%%%%%%%%%%%
-r1   = BOD.R - IN.Hmax_H2O; r2 = BOD.R; dz = min(IN.dz_H2O,IN.dz_sil);
+r1   = BOD.R - IN.Hmax_H2O*2; r2 = BOD.R; dz = min(IN.dz_H2O,IN.dz_sil);
 rH2O = linspace(r1, r2, ceil((r2-r1)/dz));
 
-r1   = IN.Hmax_irn; r2 = BOD.R - IN.Hmax_H2O; dz = IN.dz_sil;
+r1   = IN.Hmax_irn; r2 = BOD.R - IN.Hmax_H2O*2; dz = IN.dz_sil;
 rSil = linspace(r1, r2, ceil((r2-r1)/dz));
 
 r1   = 0; r2 = IN.Hmax_irn; dz = min(IN.dz_irn,IN.dz_sil);
@@ -56,7 +57,8 @@ M.L   = M.V_s./M.A(M.ind+1);  % characteristic length scale
 % Track element containing interface
 M.iOcnTop = find((M.rOcn - M.r)>=0,1,'last'); % Ocean top interface element index
 M.iOcnBot = find((M.rSil - M.r)>=0,1,'last'); % Ocean bottom interface element index
-M.iSilBot = find((M.rIrn - M.r)>=0,1,'last'); % Ocean bottom interface element index
+M.iIocTop = find((M.rIrn - M.r)>=0,1,'last'); % Ocean bottom interface element index
+M.iIocBot = find((M.rIoc - M.r)>=0,1,'last'); % Ocean bottom interface element index
 
 %%%%%%%%%%%%%%%%%%%%%%
 % The volumetric weightings are pre-computed to save time in later

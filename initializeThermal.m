@@ -18,10 +18,12 @@ function [IN, M] = initializeThermal(IN,BOD,M,MAT)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
-% Initialize ocean parameters
+% Initialize melt parameters
 %%%%%%%%%%%%%%%%%%%%%%%
 M.vOcn  = (4/3)*pi*(M.rOcn^3-M.rSil^3); % Ocean volume
-M.vH2O  = (4/3)*pi*(BOD.R^3-M.rSil^3);  % Hydrosphere volume
+M.vH2O  = (4/3)*pi*(BOD.R^3-M.rSil^3);  % Hydrosphere volume≈
+M.vIrn  = (4/3)*pi*(M.rIrn^3);         % Core volume
+M.vIoc  = (4/3)*pi*(M.rIrn^3-M.rIoc^3);   % Molten outer core volume
 M.dm_dt = 0;  % Change in melt mass vs time
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -31,8 +33,9 @@ M.dm_dt = 0;  % Change in melt mass vs time
 M.fmDiff_H2O = zeros(1,M.Nz-1);
 M.fmDiff_irn = ones(1,M.Nz-1);
 
-% Leeched mass fraction (defined on elements!)
-M.mat.fK = zeros(1,M.Nz-1);
+% Leeched mass fraction (differentiated water mass and mass fraction)
+M.mat.dmH2O_diff = 0;
+M.mat.fmH2O_diff = 0;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -60,11 +63,11 @@ M.mat.fm_s(1,end) = 1;
 % Need to initialize rho on nodes. Track for each
 M.mat.rhoFull = zeros(6,M.Nz);
 M.mat.rhoFull(M.mat.iH2Osolid,:) = MAT.H2O.s.rho0;
-M.mat.rhoFull(M.mat.iH2Omelt,:) = MAT.H2O.m.rho0;
+M.mat.rhoFull(M.mat.iH2Omelt,:)  = MAT.H2O.m.rho0;
 M.mat.rhoFull(M.mat.iSilSolid,:) = MAT.SIL.s.rho0;
-M.mat.rhoFull(M.mat.iSilMelt,:) = MAT.SIL.m.rho0;
+M.mat.rhoFull(M.mat.iSilMelt,:)  = MAT.SIL.m.rho0;
 M.mat.rhoFull(M.mat.iIrnSolid,:) = MAT.IRN.s.rho0;
-M.mat.rhoFull(M.mat.iIrnMelt,:) = MAT.IRN.m.rho0;
+M.mat.rhoFull(M.mat.iIrnMelt,:)  = MAT.IRN.m.rho0;
 rhoFull_s = n2sVolumetric(M,M.mat.rhoFull);
 
 % Bulk density
@@ -74,6 +77,11 @@ M.rho  = s2nVolumetric(M,M.rho_s);
 % Volume fractions
 M.mat.fV_s = M.rho_s .* M.mat.fm_s ./ rhoFull_s; 
 
+%%%%%%%%%%%%%%%%%%%%%%%
+% DIFFERNTIATION Flags
+%%%%%%%%%%%%%%%%%%%%%%%
+M.diffH2O = 1;
+M.diffIRN = 1;
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Get Thermal Properties

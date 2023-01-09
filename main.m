@@ -18,8 +18,20 @@ initialize;
 %%%%%%%%%%%%%%%%%%
 % Main Time Loop
 %%%%%%%%%%%%%%%%%%
+rOld =  BOD.R-M.rOcn;
+drmax = 0;
 while M.t < IN.tMax
-      
+    rNew = BOD.R-M.rOcn;
+    if abs(rNew-rOld)>drmax
+        drmax = abs(rNew-rOld);
+        disp(['Step ' num2str(M.step) ', dr = ' num2str(drmax)]);
+    end
+%     if M.step == 58413
+%         fasdf
+%     end
+    rOld = rNew;
+    
+    
     % Generate Output
     [IN, OUT, MISC] = outputManager(M,IN,BOD,OUT,MISC);
     
@@ -30,7 +42,7 @@ while M.t < IN.tMax
     M = thermalSolver(M,BOD,IN,MAT);
     
     % Differentiation
-    M = differentiate(M,IN,BOD,MAT);
+    [M,OUT] = differentiate(M,IN,BOD,MAT,OUT);
     
     % Move interfaces
     M = meltingFreezing(M,IN,BOD,MAT);
@@ -43,6 +55,6 @@ while M.t < IN.tMax
     M = getThermalProperties(M,IN,MAT);
 
     % Check for convection
-    M = getConvection(M);
+    M = getConvection(M,MAT);
        
 end
