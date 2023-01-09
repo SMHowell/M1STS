@@ -15,7 +15,7 @@ i_low = find(COMP.fE_rmn{IN.simu} >= M.fE_rmn, 1, 'last');
 i_max = length(COMP.fE_rmn{IN.simu});
 
 % if i_low == 3
-%     disp(i)
+%     disp('hep hep hep!')
 % end
 
 % interpolate values of temperature, volumic frozen fraction and density
@@ -31,7 +31,7 @@ else
 end
 
 % interpolation:
-if i_low == 1   % linear interpolation between 1st and second data points
+if i_low == 1   % linera interpolation between 1st and second data points
     T           = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.temps{IN.simu}(indexInterp),M.fE_rmn,'linear');
     rho         = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.rho_l{IN.simu}(indexInterp),M.fE_rmn,'linear');
     vlf         = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.vlf{IN.simu}(indexInterp),M.fE_rmn,'linear');

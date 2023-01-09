@@ -49,9 +49,9 @@ Q_B = r_B.^2 .* q_B;
 if M.vRes>0 
     dEtop            = -4*pi*M.dt*(Q_B(M.iResTop));
     dEbot            = 4*pi*M.dt*(Q_A(M.iResBot));   % not really sure here ......
-    if dEbot > 0
-        disp('lol nope!')
-    end
+%     if dEbot > 0
+%         disp('lol nope!')
+%     end
     M.DeltaEtop      = M.DeltaEtop + dEtop;          % cumulative energy variation
     M.DeltaEbot      = M.DeltaEbot + dEbot;
     M.DeltaE         = M.DeltaEtop + M.DeltaEbot;
@@ -80,26 +80,3 @@ M.T(end) = M.Tsurf; % Zero out dT in space
 M.T(1)   = M.Tm_ocn;
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
