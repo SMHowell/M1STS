@@ -55,7 +55,7 @@ plot(xPlot(2:end),yPlot(2:end))
 box on; grid on; 
 xlim([0,OUT.t2(lastIndTime)/IN.kyr2s])
 xlabel('Time [kyr]')
-ylabel('Reservoir Melting Temperature [K]')
+ylabel('Reservoir Freezing Temperature [K]')
 set(gca,'fontsize',24);
 
 
