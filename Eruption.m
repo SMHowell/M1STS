@@ -45,14 +45,14 @@ if M.vRes>0
     end
 
     % Erupted composition:
-    M.Ca  = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.Ca{IN.simu}(indexInterp),M.fE_rmn,'spline');
-    M.Mg  = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.Mg{IN.simu}(indexInterp),M.fE_rmn,'spline');
-    M.Na  = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.Na{IN.simu}(indexInterp),M.fE_rmn,'spline');
-    M.K   = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.K{IN.simu}(indexInterp),M.fE_rmn,'spline');
-    M.Cl  = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.Cl{IN.simu}(indexInterp),M.fE_rmn,'spline');
-    M.S   = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.S{IN.simu}(indexInterp),M.fE_rmn,'spline');
-    M.C   = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.C{IN.simu}(indexInterp),M.fE_rmn,'spline');
-    M.Si  = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.Si{IN.simu}(indexInterp),M.fE_rmn,'spline');
+    M.compCa  = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.Ca{IN.simu}(indexInterp),M.fE_rmn,'spline');
+    M.compMg  = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.Mg{IN.simu}(indexInterp),M.fE_rmn,'spline');
+    M.compNa  = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.Na{IN.simu}(indexInterp),M.fE_rmn,'spline');
+    M.compK   = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.K{IN.simu}(indexInterp),M.fE_rmn,'spline');
+    M.compCl  = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.Cl{IN.simu}(indexInterp),M.fE_rmn,'spline');
+    M.compS   = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.S{IN.simu}(indexInterp),M.fE_rmn,'spline');
+    M.compC   = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.C{IN.simu}(indexInterp),M.fE_rmn,'spline');
+    M.compSi  = interp1(COMP.fE_rmn{IN.simu}(indexInterp),COMP.Si{IN.simu}(indexInterp),M.fE_rmn,'spline');
 
     % check if it overcomes threshold overpressure:
     if M.deltaP >= M.DeltaPc

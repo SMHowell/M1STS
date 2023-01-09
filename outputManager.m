@@ -84,14 +84,14 @@ if M.vRes>0
         OUT.t2(IN.outInd2)     = M.t; 
 
         % Store composition data
-        OUT.comp{1,IN.outInd2}  =  M.Ca;
-        OUT.comp{2,IN.outInd2}  =  M.Mg;
-        OUT.comp{3,IN.outInd2}  =  M.Na;
-        OUT.comp{4,IN.outInd2}  =  M.K;
-        OUT.comp{5,IN.outInd2}  =  M.Cl;
-        OUT.comp{6,IN.outInd2}  =  M.S;
-        OUT.comp{7,IN.outInd2}  =  M.C;
-        OUT.comp{8,IN.outInd2}  =  M.Si;
+        OUT.comp{1,IN.outInd2}  =  M.compCa;
+        OUT.comp{2,IN.outInd2}  =  M.compMg;
+        OUT.comp{3,IN.outInd2}  =  M.compNa;
+        OUT.comp{4,IN.outInd2}  =  M.compK;
+        OUT.comp{5,IN.outInd2}  =  M.compCl;
+        OUT.comp{6,IN.outInd2}  =  M.compS;
+        OUT.comp{7,IN.outInd2}  =  M.compC;
+        OUT.comp{8,IN.outInd2}  =  M.compSi;
     end
 end
 
