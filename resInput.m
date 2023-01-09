@@ -21,6 +21,7 @@ clear; clc;
 %%%%%%%%%%%%%%%%%%
 IN.tMax  = '1 Myr';   % Model run time, use 'yr' 'kyr' 'Myr' or 'Gyr'
 IN.tOut  = '10 kyr';  % Output Frequency
+IN.tOut2 = '0.1 kyr';  % Output Frequency 2
 IN.pltOn = 1;         % Plot output in real time
 IN.movOn = 0;         % Save plot movie
 

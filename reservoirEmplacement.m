@@ -60,7 +60,7 @@ if (M.t>IN.tRes) && (M.resEmp == 0)
     P0        = IN.zResTop * BOD.g * 920; % Better value for ice density????  <------------ /!\
     M.DeltaPc = 2*(sigmaFar + P0);
 
-    M.eruption = 0;
+    M.eruption = 1;
 
 end
 

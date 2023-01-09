@@ -21,6 +21,7 @@ if IN.outInd * IN.tOut < M.t
     OUT.dm_dt(IN.outInd) = M.dm_dt ;
     OUT.Tsurf(IN.outInd) = M.Tsurf;  % Surface Temperature
     OUT.Dice(IN.outInd)  = BOD.R-M.rOcnTop; % Ice thickness
+
     
     if M.fV>0 % Only output of theres a reservoir, else zeros
         OUT.vRes(IN.outInd)  = M.vRes;   % Reservoir volume
@@ -74,25 +75,29 @@ end
 
 
 %%%%%%%%%%%%%%%%%%
-% For composition plots
+% Composition plots
 %%%%%%%%%%%%%%%%%%
+IN.outInd = 0;
 
-% if IN.outInd * IN.tOut2 < M.t    
-%     IN.outInd = IN.outInd + 1;
-% 
-%     OUT.t2(IN.outInd)     = M.t; 
-% 
-%     % Store composition data
-%     OUT.comp{1,IN.outInd}  =  COMP.Ca;
-%     OUT.comp{2,IN.outInd}  =  COMP.Mg;
-%     OUT.comp{3,IN.outInd}  =  COMP.Na;
-%     OUT.comp{4,IN.outInd}  =  COMP.K;
-%     OUT.comp{5,IN.outInd}  =  COMP.Cl;
-%     OUT.comp{6,IN.outInd}  =  COMP.S;
-%     OUT.comp{7,IN.outInd}  =  COMP.C;
-%     OUT.comp{8,IN.outInd}  =  COMP.Si;
-%     OUT.comp{9,IN.outInd}  =  COMP.Mtg;
-% end
+if IN.outInd * IN.tOut2 < M.t    
+    IN.outInd = IN.outInd + 1;
+
+    OUT.t2(IN.outInd)     = M.t; 
+
+    % Store composition data
+    OUT.comp{1,IN.outInd}  =  COMP.Ca;
+    OUT.comp{2,IN.outInd}  =  COMP.Mg;
+    OUT.comp{3,IN.outInd}  =  COMP.Na;
+    OUT.comp{4,IN.outInd}  =  COMP.K;
+    OUT.comp{5,IN.outInd}  =  COMP.Cl;
+    OUT.comp{6,IN.outInd}  =  COMP.S;
+    OUT.comp{7,IN.outInd}  =  COMP.C;
+    OUT.comp{8,IN.outInd}  =  COMP.Si;
+    OUT.comp{9,IN.outInd}  =  COMP.Mtg;
+end
+
+figure()
+plot(OUT.t2,OUT.comp{1})
 
 end
 

@@ -8,45 +8,6 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [IN,M] = initializeTime(IN,M)
+figure(2)
 
-% Book keeping on inputs
-IN = parseTime(IN);
-
-% Initialize time array and timestep
-M.t       = 0; % Time [s]
-M.step    = 0; % Timestep
-IN.outInd = 0; % Index for output to console
-
-% Number of outputs
-IN.NOut  = ceil(IN.tMax/IN.tOut)+1;
-IN.NOut2 = ceil(IN.tMax/IN.tOut2)+1;
-
-% Number of eruptions
-IN.nErupt = 50;
-
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+plot(OUT.t2,OUT.comp);
