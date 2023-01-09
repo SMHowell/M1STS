@@ -27,5 +27,6 @@ MISC      = []; % Miscellaneous array collector
 
 OUT.comp        = zeros(IN.Ncomp,IN.NOut2); % composition
 OUT.eruptTimes  = zeros(IN.nErupt,1);       % time of Eruptions
+OUT.eruptV      = zeros(IN.nErupt,1);       % volume of Eruptions
 
 end

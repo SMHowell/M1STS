@@ -78,7 +78,7 @@ if M.vRes>0
 
     % Grab reservoir properties from composition data
     [T, rho, vlf, vif] = coolFreeze(M, COMP, IN);
-
+    
     % Update parameters
     M.vif       = vif;
     M.rhoRes    = rho;

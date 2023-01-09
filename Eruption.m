@@ -74,6 +74,8 @@ if M.vRes>0 && M.canErupt
         M.vRes_old = M.Vl_compressed;
 
         OUT.eruptTimes(M.eruption) = M.t;
+        OUT.eruptV(M.eruption)     =  M.Vice;
+        
         M.eruption  = M.eruption + 1;
 
     end

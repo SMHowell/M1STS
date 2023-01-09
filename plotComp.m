@@ -33,15 +33,28 @@ set(gca,'fontsize',24);
 
 
 figure(3); clf; set(gcf,'color','w');  
-%  eruption intervalss
+%  eruption intervalss and volumes
 subplot(221);
 
+yyaxis left
 plot(OUT.eruptTimes(1:M.eruption-2)/IN.kyr2s,diff(OUT.eruptTimes(1:M.eruption-1)/IN.yr2s))
 
-axis tight; box on; grid on; 
 xlim([0,OUT.t2(lastIndTime)/IN.kyr2s])
 xlabel('Time [kyr]')
 ylabel('Eruption Interval [yr]')
+
+yyaxis right
+
+xPlot = OUT.t2(OUT.eruptV~=0)/IN.kyr2s;
+yPlot = OUT.eruptV(OUT.eruptV~=0)/1e9;
+ylim([0,0.12])
+
+plot(xPlot(2:end),yPlot(2:end))
+xlim([0,OUT.t2(lastIndTime)/IN.kyr2s])
+xlabel('Time [kyr]')
+ylabel('Eruption Volume [km^3]')
+
+box on; grid on; 
 set(gca,'fontsize',24);
 
 % Tmelt
