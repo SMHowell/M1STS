@@ -32,8 +32,9 @@ ylabel('Concentration [mol/kg H_2O]')
 set(gca,'fontsize',24);
 
 
-% Now eruption intervals
 figure(3); clf; set(gcf,'color','w');  
+%  eruption intervalss
+subplot(221);
 
 plot(OUT.eruptTimes(1:M.eruption-2)/IN.kyr2s,diff(OUT.eruptTimes(1:M.eruption-1)/IN.yr2s))
 
@@ -42,3 +43,86 @@ xlim([0,OUT.t2(lastIndTime)/IN.kyr2s])
 xlabel('Time [kyr]')
 ylabel('Eruption Interval [yr]')
 set(gca,'fontsize',24);
+
+% Tmelt
+subplot(222);
+
+xPlot = OUT.t(OUT.Tmelt~=0)/IN.kyr2s;
+yPlot = OUT.Tmelt(OUT.Tmelt~=0);
+
+plot(xPlot(2:end),yPlot(2:end))
+
+box on; grid on; 
+xlim([0,OUT.t2(lastIndTime)/IN.kyr2s])
+xlabel('Time [kyr]')
+ylabel('Reservoir Melting Temperature [K]')
+set(gca,'fontsize',24);
+
+
+% Ice thickness 
+subplot(223);
+
+xPlot = OUT.t(OUT.Dice~=0)/IN.kyr2s;
+yPlot = OUT.Dice(OUT.Dice~=0)/1e3;
+
+plot(xPlot(2:end),yPlot(2:end))
+
+box on; grid on; 
+xlim([0,OUT.t2(lastIndTime)/IN.kyr2s])
+xlabel('Time [kyr]')
+ylabel('Ice Shell Thickness [km]')
+set(gca,'fontsize',24);
+
+
+% Surface Temp
+subplot(224);
+
+xPlot = OUT.t(OUT.Dice~=0)/IN.kyr2s;
+yPlot = OUT.Tsurf(OUT.Tsurf~=0);
+
+plot(xPlot(2:end),yPlot(2:end))
+
+box on; grid on; 
+xlim([0,OUT.t2(lastIndTime)/IN.kyr2s])
+xlabel('Time [kyr]')
+ylabel('Surface Temperature [K]')
+set(gca,'fontsize',24);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

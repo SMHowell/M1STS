@@ -10,7 +10,7 @@
 
 function M = checkDeformation(M)
 
-if M.vRes>0
+if M.vRes>0 && M.canErupt
     if M.t > M.tMaxwell
         fprintf('Maxwell time: %f yr', M.tMaxwell/365.25/24/3600);
         M.canErupt = 0;

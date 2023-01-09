@@ -8,7 +8,7 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [M] = meltingFreezing(M,IN,COMP)
+function [M,OUT] = meltingFreezing(M,IN,COMP,OUT)
 
 
 %%%%%%%%%%%%%%%%%%
@@ -84,7 +84,8 @@ if M.vRes>0
     M.rhoRes    = rho;
     M.fV        = 1 - vlf;
     M.Tm_res    = T;
-
+    OUT.Tmelt   = T;
+    
     % Change in reservoir size
     vResOld     = M.vRes;
     M.vRes      = (4/3)*pi*IN.rRes^3 * vlf;     % New reservoir volume
