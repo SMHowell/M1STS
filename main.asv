@@ -39,14 +39,14 @@ while M.t < IN.tMax && M.Tm_res > M.Tstop
     % Eruption?
     M = Eruption(IN,COMP,M);
     
+    % Determine whether to emplace reservoir
+    [COMP, M] = reservoirEmplacement(BOD,IN,M,COMP);
+    
     % Update thermal properties
     M = getThermalProperties(M);
     
     % Generate Output
     [IN, OUT, MISC] = outputManager(M,IN,BOD,COMP,OUT,MISC);
-
-    % Determine whether to emplace reservoir
-    [COMP, M] = reservoirEmplacement(BOD,IN,M,COMP);
        
 end
 

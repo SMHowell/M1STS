@@ -17,9 +17,14 @@ IN = parseTime(IN);
 M.t       = 0; % Time [s]
 M.step    = 0; % Timestep
 IN.outInd = 0; % Index for output to console
+IN.outInd2 = 0; % Index for composition output to console
 
 % Number of outputs
-IN.NOut = ceil(IN.tMax/IN.tOut)+1;
+IN.NOut  = ceil(IN.tMax/IN.tOut)+1;
+IN.NOut2 = ceil(IN.tMax/IN.tOut2)+1;
+
+% Number of eruptions
+IN.nErupt = 50;
 
 end
 
