@@ -20,12 +20,10 @@ plot(OUT.t2(1:IN.outInd2),[OUT.comp{6,:}])
 plot(OUT.t2(1:IN.outInd2),[OUT.comp{4,:}])
 plot(OUT.t2(1:IN.outInd2),[OUT.comp{8,:}])
 
-i=0
-for i in IN.nErupt
-    
-    i = i+1
-end
 
+for i = 1:IN.nErupt
+    xline(OUT.eruptTimes(i))
+end
 
 hold off
 
