@@ -12,7 +12,6 @@ function [OUT,MISC] = initializeOutputs(IN,M)
 
 % Initialize and add the arrays to track here
 OUT.t     = zeros(1,IN.NOut); % Time of output
-OUT.t2    = zeros(1,IN.NOut2);% Time for composition outputs
 OUT.dm_dt = zeros(1,IN.NOut); % Freezing rate [kg/s]
 OUT.Tsurf = zeros(1,IN.NOut); % Surface Temperature
 OUT.Dice  = zeros(1,IN.NOut); % Ice thickness
@@ -24,9 +23,5 @@ OUT.fV    = zeros(1,IN.NOut); % Reservoir frozen fraction
 OUT.Tmelt = zeros(1,IN.NOut); % Reservoir melting temperature
 
 MISC      = []; % Miscellaneous array collector
-
-OUT.comp = cell(8,IN.NOut);
-
-OUT.eruptTimes = zeros(IN.nErupt);
 
 end

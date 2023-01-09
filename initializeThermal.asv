@@ -10,56 +10,13 @@
 
 function [M] = initializeThermal(IN,BOD,COMP,M)
 
-%%%%%%%%%%%%%%%%%%%%%%%
-% Initialize melt 
-%%%%%%%%%%%%%%%%%%%%%%%
-rIce   = BOD.R - IN.H0;   % Radius at the base of the ice shell [m]
-% *volume* fraction (on elements)
-M.vfm = zeros(1,IN.Nz-1); 
-M.vfm(M.r<rIce) = 1;
-M.dm_dt = 0;  % Change in melt mass vs time
-
-
-%%%%%%%%%%%%%%%%%%%%%%%
-% Initialize reservoir/ocean parameters
-%%%%%%%%%%%%%%%%%%%%%%%
-% M.Tm_ocn = IN.Tm_ocn; % Melt temperature in ocean
-M.Tm_ocn = COMP.temps{IN.simu}(1);
-% M.rhoOcn = IN.rhoOcn; % Density in ocean
-M.rhoOcn = COMP.rho_l{IN.simu}(1);
-M.CpOcn  = IN.CpOcn;  % Specific heat capacity in ocean
-
-M.fV     = 0;         % Frozen volume fraction of reservoir 
-M.resEmp = 0;         % Flag for empalcement of reservoir
-M.Tm_res = M.Tm_ocn;  % Melt temperature in reservoir
-M.rhoRes = M.rhoOcn;  % Density in reservoir
-M.CpRes  = IN.CpOcn;  % Specific heat capacity in reservoir
-
-% Track interface(s)
-M.iOcnTop = find(M.vfm>0,1,'last'); % Ocean top interface element index
-M.rOcnTop = rIce;                   % Ocean top interface radius
-
-M.iResTop = []; % Reservoir top interface element index
-M.rResTop = []; % Reservoir top interface radius
-
-M.iResBot = []; % Reservoir bottom interface element index
-M.rResBot = []; % Reservoir bottom interface radius
-
-M.rRes = []; % Reservoir radius
-M.vRes = []; % Reservoir volume
-M.mRes = []; % Reservoir mass
-
-
-%%%%%%%%%%%%%%%%%%%%%%%
-% Initialize surface parameters
-%%%%%%%%%%%%%%%%%%%%%%%
 % First, we must get the surface temperature that matches the steady state
 % conductive thickness prescribed
 sigma  = 5.67e-8;     % Stefan Boltzamnn constant [W m^-2 K^-4]
 m      = 18.01528e-3; % Molar weight of H2O [kg mol^-1]
 R      = 8.314;       % Ideal gas constant [J mol^-1 K^-1]
 Es     = 3.8e26;      % Solar output [W]
-
+rIce   = BOD.R - IN.H0;   % Radius at the base of the ice shell [m]
 
 % Search array
 TsurfTemp = linspace(10,273,1000); % Surface temperature range to search [K]
@@ -119,9 +76,9 @@ z             = linspace(0,IN.H0,1000); % Depth profile [m]
 dT_crit = 1e-5; % Convergence criterion for surface temperature [K]
 T_old   = 0;    % Old surface temperature [K]
 while abs(Tsurf_0-T_old) > dT_crit
-    T_z   = Tsurf_0*(M.Tm_ocn/Tsurf_0).^(z/IN.H0);            % Temperature profile
+    T_z   = Tsurf_0*(IN.Tm_ocn/Tsurf_0).^(z/IN.H0);            % Temperature profile
     k     = mean(632 ./ T_z + 0.38 - 1.97e-3 .* T_z);          % Mean solid ice conductivity [W/m K]
-    qIce  = (k * (M.Tm_ocn - Tsurf_0)) * (1/IN.H0 + 1/BOD.R); % Heat flux through ice evaluated at the surface [W/m^2]
+    qIce  = (k * (IN.Tm_ocn - Tsurf_0)) * (1/IN.H0 + 1/BOD.R); % Heat flux through ice evaluated at the surface [W/m^2]
     T_old = Tsurf_0;                                           % Store previous result
     Tsurf_0  = interp1(qAnom-qIce,TsurfTemp,0);                % New surface temperature guess
 end
@@ -137,24 +94,60 @@ M.qSol    = qSol; % Solar insolation heat flux
 M.qRad    = qRad; % Radiogenic heat flux 
 M.qLoss   = qIce; % Heat flux from interior through ice shell [W/m^2]
 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%
 % Now, thermal structure can be created
 %%%%%%%%%%%%%%%%%%%%%%%
 % Steady state conductive structure 
 z_eff     = (1./(BOD.R-M.r) + 1/(BOD.R)).^-1; % corrected effective depth
 z_max_eff = (1/IN.H0 + 1/(BOD.R)).^-1;        % corrected effective thickness
-M.T       = M.Tsurf_0*(M.Tm_ocn/M.Tsurf_0).^((BOD.R-M.r)/IN.H0);
+M.T       = M.Tsurf_0*(IN.Tm_ocn/M.Tsurf_0).^((BOD.R-M.r)/IN.H0);
 
 % Enforce space BCs
 M.T(end-1:end) = M.Tsurf_0;
 
 % Enforce ocean
-M.T(M.r<rIce) = M.Tm_ocn;
+M.T(M.r<rIce) = IN.Tm_ocn;
 
 % Initialize Nusselt number
 M.Nu = 1;
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% Initialize melt 
+%%%%%%%%%%%%%%%%%%%%%%%
+% *volume* fraction (on elements)
+M.vfm = zeros(1,IN.Nz-1); 
+M.vfm(M.r<rIce) = 1;
+M.dm_dt = 0;  % Change in melt mass vs time
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% Initialize reservoir/ocean parameters
+%%%%%%%%%%%%%%%%%%%%%%%
+% M.Tm_ocn = IN.Tm_ocn; % Melt temperature in ocean
+M.Tm_ocn = COMP.temps{IN.simu}(1);
+% M.rhoOcn = IN.rhoOcn; % Density in ocean
+M.rhoOcn = COMP.rho_l{IN.simu}(1);
+M.CpOcn  = IN.CpOcn;  % Specific heat capacity in ocean
+
+M.fV     = 0;         % Frozen volume fraction of reservoir 
+M.resEmp = 0;         % Flag for empalcement of reservoir
+M.Tm_res = M.Tm_ocn; % Melt temperature in reservoir
+M.rhoRes = IN.rhoOcn; % Density in reservoir
+M.rhoRes = COMP.rho_l{IN.simu}(1); % Density in reservoir from composition data
+M.CpRes  = IN.CpOcn;  % Specific heat capacity in reservoir
+
+% Track interface(s)
+M.iOcnTop = find(M.vfm>0,1,'last'); % Ocean top interface element index
+M.rOcnTop = rIce;                   % Ocean top interface radius
+
+M.iResTop = []; % Reservoir top interface element index
+M.rResTop = []; % Reservoir top interface radius
+
+M.iResBot = []; % Reservoir bottom interface element index
+M.rResBot = []; % Reservoir bottom interface radius
+
+M.rRes = []; % Reservoir radius
+M.vRes = []; % Reservoir volume
+M.mRes = []; % Reservoir mass
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % Initialize thermal properties

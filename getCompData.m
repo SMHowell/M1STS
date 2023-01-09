@@ -42,8 +42,7 @@ i = IN.simu;
     end
     
     % volumic liquid fraction
-    % COMP.V_init{i}  = table2array(COMP.Table{i}(1,2)) / 1e6;
-    COMP.V_init{i}  = 1000 / 1e6;   % Ask Marc and Mariam if the initial volume is always 1000 cm^3 ???
+    COMP.V_init{i}  = table2array(COMP.Table{i}(1,2)) / 1e6;
     COMP.vlf{i}     = COMP.V_l{i} ./ COMP.V_init{i}; % issue with datasets where V_i is well bellow 1e-3!!!
     
     if isempty(COMP.vlf{i}(COMP.vlf{i}>1)) == false

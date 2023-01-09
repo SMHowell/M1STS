@@ -8,7 +8,7 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [IN, OUT, MISC] = outputManager(M,IN,BOD,COMP,OUT,MISC)
+function [IN, OUT, MISC] = outputManager(M,IN,BOD,OUT,MISC)
 
 if IN.outInd * IN.tOut < M.t    
     IN.outInd = IN.outInd + 1;
@@ -69,30 +69,6 @@ if IN.outInd * IN.tOut < M.t
         save(['Output/' outputName '.mat'],'OUT');
     end
     
-end
-
-
-
-%%%%%%%%%%%%%%%%%%
-% For composition plots
-%%%%%%%%%%%%%%%%%%
-
-if M.vRes>0
-    if IN.outInd2 * IN.tOut2 < M.t    
-        IN.outInd2 = IN.outInd2 + 1;
-    
-        OUT.t2(IN.outInd2)     = M.t; 
-
-        % Store composition data
-        OUT.comp{1,IN.outInd2}  =  M.compCa;
-        OUT.comp{2,IN.outInd2}  =  M.compMg;
-        OUT.comp{3,IN.outInd2}  =  M.compNa;
-        OUT.comp{4,IN.outInd2}  =  M.compK;
-        OUT.comp{5,IN.outInd2}  =  M.compCl;
-        OUT.comp{6,IN.outInd2}  =  M.compS;
-        OUT.comp{7,IN.outInd2}  =  M.compC;
-        OUT.comp{8,IN.outInd2}  =  M.compSi;
-    end
 end
 
 end

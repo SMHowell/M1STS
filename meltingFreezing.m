@@ -80,12 +80,11 @@ if M.vRes>0
     [T, rho, vlf, vif] = coolFreeze(M, COMP, IN);
 
     % Update parameters
-    M.vif       = vif;
     M.rhoRes    = rho;
     M.fV        = 1 - vlf;
     M.Tm_res    = T;
 
-    % Change in reservoir size
+    %     % Change in reservoir size
     vResOld     = M.vRes;
     M.vRes      = (4/3)*pi*IN.rRes^3 * vlf;     % New reservoir volume
     vResDiff    = M.vRes - vResOld;
@@ -95,10 +94,7 @@ if M.vRes>0
     % Change in interface location
     M.rResTop = ((3/(4*pi))*vDiffTop+M.rResTop^3)^(1/3);
     M.rResBot = (-(3/(4*pi))*vDiffBot+M.rResBot^3)^(1/3);
-
-    % Freezing front velocity (average top and bottom)
-    M.freezeRate = ((vResOld*3/4/pi)^(1/3)-(M.vRes*3/4/pi)^(1/3)) / M.dt * 100/365.25/24/3600; % in cm/yr
-     
+    
     % Change in reservoir size and frozen fraction
     M.rRes  = (M.rResTop-M.rResBot)/2; % Reservoir radius
     
@@ -107,3 +103,22 @@ if M.vRes>0
 
 end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

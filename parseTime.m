@@ -35,7 +35,6 @@ switch unit
 end
 IN.tMax = val*conversion;
 
-
 % Parse output time
 timeStr = strsplit(IN.tOut);
 val     = str2double(timeStr{1});
@@ -55,28 +54,9 @@ switch unit
 end
 IN.tOut = val*conversion;
 
-
-timeStr2 = strsplit(IN.tOut2);
-val2     = str2double(timeStr2{1});
-unit2    = timeStr2{2};
-
-switch unit2
-    case 'yr'
-        conversion = IN.yr2s;
-    case 'kyr'
-        conversion = IN.kyr2s;
-    case 'Myr'
-        conversion = IN.Myr2s;
-    case 'Gyr'
-        conversion = IN.Gyr2s;
-    otherwise
-        error('Incorrect timescale selected.');
-end
-IN.tOut2 = val2*conversion;
-
 % Get number of output timesteps
 IN.outN = ceil(IN.tMax / IN.tOut)+1; 
-IN.outN2 = ceil(IN.tMax / IN.tOut2)+1; 
+
 
 % Parse emplacement delay
 timeStr = strsplit(IN.tRes);
@@ -96,7 +76,6 @@ switch unit
         error('Incorrect timescale selected.');
 end
 IN.tRes = val*conversion;
-
 
 
 
