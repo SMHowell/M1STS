@@ -8,23 +8,28 @@
 % (C)2022 California Institute of Technology. All rights reserved.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-figure()
-
-hold on
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{1,:}])
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{2,:}])
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{3,:}])
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{4,:}])
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{5,:}])
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{6,:}])
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{4,:}])
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{8,:}])
+figure(2)
 
 
-for i = 1:IN.nErupt
-    xline(OUT.eruptTimes(i))
-end
+semilogy(OUT.t2(1:IN.outInd2)/365.25/24/3600,[OUT.comp{1,:}],'LineWidth',2);
+hold on;
+semilogy(OUT.t2(1:IN.outInd2)/365.25/24/3600,[OUT.comp{2,:}],'LineWidth',2);
+hold on;
+semilogy(OUT.t2(1:IN.outInd2)/365.25/24/3600,[OUT.comp{3,:}],'LineWidth',2);
+hold on;
+semilogy(OUT.t2(1:IN.outInd2)/365.25/24/3600,[OUT.comp{4,:}],'LineWidth',2);
+hold on;
+semilogy(OUT.t2(1:IN.outInd2)/365.25/24/3600,[OUT.comp{5,:}],'LineWidth',2);
+hold on;
+semilogy(OUT.t2(1:IN.outInd2)/365.25/24/3600,[OUT.comp{6,:}],'LineWidth',2);
+hold on;
+semilogy(OUT.t2(1:IN.outInd2)/365.25/24/3600,[OUT.comp{4,:}],'LineWidth',2);
+hold on;
+semilogy(OUT.t2(1:IN.outInd2)/365.25/24/3600,[OUT.comp{8,:}],'LineWidth',2);
 
-hold off
+grid on;
+% for i = 1:IN.nErupt
+    % xline(OUT.eruptTimes(i))
+% end
 
 legend('Ca', 'Mg', 'Na', 'K', 'Cl', 'S', 'C', 'Si');
