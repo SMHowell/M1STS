@@ -10,13 +10,11 @@
 
 figure()
 
+plot(OUT.t2(1:IN.outInd2),[OUT.comp{1,:}], 'Ca');
+plot(OUT.t2(1:IN.outInd2),[OUT.comp{1,:}], 'Mg');
+plot(OUT.t2(1:IN.outInd2),[OUT.comp{1,:}], 'K');
+plot(OUT.t2(1:IN.outInd2),[OUT.comp{1,:}], 'Cl ');
 plot(OUT.t2(1:IN.outInd2),[OUT.comp{1,:}]);
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{2,:}]);
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{3,:}]);
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{4,:}]);
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{5,:}]);
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{6,:}]);
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{4,:}]);
-plot(OUT.t2(1:IN.outInd2),[OUT.comp{8,:}]);
-
-legend('Ca', 'Mg', 'Na', 'K', 'Cl', 'S', 'C', 'Si');
+plot(OUT.t2(1:IN.outInd2),[OUT.comp{1,:}]);
+plot(OUT.t2(1:IN.outInd2),[OUT.comp{1,:}]);
+plot(OUT.t2(1:IN.outInd2),[OUT.comp{1,:}]);
