@@ -34,7 +34,7 @@ IN.lat  = 0;          % Latitude of simulation (deg)
 %%%%%%%%%%%%%%%%%%
 % Geometry
 %%%%%%%%%%%%%%%%%%
-IN.H0  = 10e3;        % Initial ice shell thickness [m]
+IN.H0  = 25e3;        % Initial ice shell thickness [m]
 
 IN.Nz  = 200;         % Number of nodes in vertical direction
 IN.Nx  = 100;         % Number of nodes in hotizontal direction (not implemented)
@@ -61,7 +61,7 @@ IN.X      = 5e-10; % Liquid water compressibility [Pa^-1]
 %%%%%%%%%%%%%%%%%%
 % Composition
 %%%%%%%%%%%%%%%%%%
-IN.simu   = 14;      % simulation number (see CompData file)
+IN.simu   = 5;      % simulation number (see CompData file)
 IN.Ncomp  = 8;       % Number of species tracked
 
 % Number of eruptions
