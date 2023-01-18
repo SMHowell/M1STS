@@ -19,9 +19,12 @@ OUT.Dice  = zeros(1,IN.NOut); % Ice thickness
 
 OUT.vRes  = zeros(1,IN.NOut); % Reservoir volume
 OUT.rRes  = zeros(1,IN.NOut); % Reservoir radius
-OUT.zRes  = zeros(1,IN.NOut); % Reservoir Depth
+OUT.zRes  = zeros(1,IN.NOut); % Reservoir depth
 OUT.fV    = zeros(1,IN.NOut); % Reservoir frozen fraction
 OUT.Tmelt = zeros(1,IN.NOut); % Reservoir melting temperature
+OUT.freezeRate    = zeros(1,IN.NOut); % Freezing front velocity – average
+OUT.freezeRateTop = zeros(1,IN.NOut); % Freezing front velocity – top
+OUT.freezeRateBot = zeros(1,IN.NOut); % Freezing front velocity – bottom
 
 MISC      = []; % Miscellaneous array collector
 

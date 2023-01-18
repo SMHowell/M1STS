@@ -64,8 +64,8 @@ IN.X      = 5e-10; % Liquid water compressibility [Pa^-1]
 IN.simu   = 5;      % simulation number (see CompData file)
 IN.Ncomp  = 8;       % Number of species tracked
 
-% Number of eruptions
-IN.nErupt = 1e3;
+% Max number of eruptions
+IN.nErupt = 1e4;
 
 %%%%%%%%%%%%%%%%%%
 % Run Model

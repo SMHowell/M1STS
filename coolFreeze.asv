@@ -10,7 +10,7 @@
 
 function [T, rho, vlf, vif] = coolFreeze(M, COMP, IN)
 
-% if we froze further than the PHREEQC model:
+% If 
 if M.fE_rmn < COMP.fE_rmn{IN.simu}(end-1)
     error('No more PHREEQC data')
 end

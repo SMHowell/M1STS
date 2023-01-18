@@ -31,20 +31,25 @@ if (M.t>IN.tRes) && (M.resEmp == 0)
     M.iResBot = find((M.rResBot - M.r>0)>0,1,'last'); % Reservoir bottom interface element index
    
     % Set properties
-    M.vif    = 0;
-    M.vlf    = 1;
-    M.vShell = 4/3*pi*M.rResTop^3 - 4/3*pi*M.rResBot^3; % volume of the liquid shell
-    M.rRes   = (M.rResTop-M.rResBot)/2; % Reservoir radius
-    M.vRes   = (4/3)*pi*M.rRes^3; % Reservoir volume
+    M.vif       = 0;
+    M.vlf       = 1;
+    M.vShell    = 4/3*pi*M.rResTop^3 - 4/3*pi*M.rResBot^3; % volume of the liquid shell
+    M.rRes      = (M.rResTop-M.rResBot)/2; % Reservoir radius
+    M.vRes      = (4/3)*pi*M.rRes^3; % Reservoir volume
     M.vRes_old  = M.vRes;
     M.Vice_old  = 0;
     M.vRes_init = M.vRes;         % Initial reservoir volume 
-    M.rhoRes = M.rhoOcn;          % Reservoir density
-    M.CpRes  = M.CpOcn;           % Reservoir specific heat capacity
-    M.mRes   = M.vRes*M.rhoRes;   % Reservoir mass
+    M.rhoRes    = M.rhoOcn;          % Reservoir density
+    M.CpRes     = M.CpOcn;           % Reservoir specific heat capacity
+    M.mRes      = M.vRes*M.rhoRes;   % Reservoir mass
+
+    % Dike properties
+    a           = 100; % Dike width 1 (m). Note: arbitrary, we don't have data
+    b           = 2;   % Dike width 2 (m). Note: arbitrary, we don't have data
+    M.Vdike     = IN.zResTop * a * b;
 
     % Initialize energy
-    [COMP, M] = initializeEnergy(IN,COMP,M);
+    [COMP, M]   = initializeEnergy(IN,COMP,M);
 
     % Calculate Maxwell time far from reservoir
     IN.E        = 1e9;                              % Young modulus

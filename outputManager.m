@@ -28,6 +28,10 @@ if IN.outInd * IN.tOut < M.t
         OUT.zRes(IN.outInd)  = BOD.R-M.rResTop; % Reservoir Depth
         OUT.fV(IN.outInd)    = M.fV;     % Reservoir frozen fraction
         OUT.Tmelt(IN.outInd) = M.Tm_res; % Reservoir melting temperature
+        % Freezing rate (calculated in MeltingFreezing):
+        OUT.freezeRate(IN.outInd)    = M.freezeRate;
+        OUT.freezeRateTop(IN.outInd) = M.freezeRateTop;
+        OUT.freezeRateBot(IN.outInd) = M.freezeRateBot;
     end
     
     %%%%%%%%%%%%%%%%%%
